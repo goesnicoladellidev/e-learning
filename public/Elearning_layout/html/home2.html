@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GN Treinamento</title>
+    <link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/olton/Metro-UI-CSS/master/build/css/metro-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/estilo.css">
+    <link rel="stylesheet" type="text/css" href="../css/boxes2.css">
+    <link rel="shortcut icon" href="../img/student_icon.jpg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="top">
+        <form action="" id="search" class="slide-fwd-left">
+            <div class="pesquisa">
+                <input type="search" placeholder="Buscar">
+                <a href=""><span class="fa fa-user fa-lg"></span></a>
+                <a href=""><span class="fa fa-sign-out fa-lg"></span></a>
+            </div>
+        </form>
+    </header>
+    <ul class="box">
+        <li class="box-item item-1">
+            <p class="xp">700 XP</p><br>
+            <p class="txt" id="exp">Experiência</p>
+            <p class="icon"><span class="fa fa-signal fa-2x"></span></p>
+        </li>
+        <li class="box-item item-2">
+            <p class="xp" id="curso">2 Concluídos</p><br>
+            <p class="txt" id="cursos">Cursos</p>
+            <p class="icon"><span class="fa fa-book fa-2x"></span></p>
+        </li>
+        <li class="box-item item-3">
+            <p class="xp">0 pts</p><br>
+            <p class="txt" id="quiz">Quiz</p>
+            <p class="icon"><span class="fa fa-pie-chart fa-2x"></span></p>
+        </li>
+    </ul>
+	
+    <div class="table-container" style="overflow-x:auto;">
+        <div class="btn-group" style="width:100%;">
+            <button style="width:33.3%" id="btn-rkg"><a>Ranking Geral</a></button>
+            <button style="width:33.3%" id="btn-rkg"><a>Ranking Semanal</a></button>
+            <button style="width:33.3%" id="btn-rkg"><a>Ranking Mensal</a></button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Posição</th>
+                    <th>Nome</th>
+                    <th>Patente</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="../img/avatar_1.png" alt="" class="avatar"></td>
+                    <td>2º lugar</td>
+                    <td>Teste</td>
+                    <td><strong>Iniciante:</strong> 200 pts</td>
+                </tr>
+                <tr>
+                    <td><img src="../img/avatar.png" alt="" class="avatar"></td>
+                    <td>3º lugar</td>
+                    <td>Teste</td>
+                    <td><strong>Iniciante:</strong> 100 pts</td>
+                </tr>
+                <tr>
+                    <td><img src="../img/avatar.png" alt="" class="avatar"></td>
+                    <td>5º lugar</td>
+                    <td>Teste</td>
+                    <td><strong>Iniciante:</strong> 100 pts</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="box-chamada">
+        <section>
+
+            
+            <h4>Presenças</h4>
+            <label for="presenca">100%</label>
+            <div class="progress-1">
+                <span style="width:60%"></span>
+            </div>
+
+        </section>
+        <section>
+        
+            <h4>Dias Inativo</h4>
+            <label for="inativo">0 dias</label>
+            <div class="progress-2">
+                <span style="width:60%"></span>
+            </div>
+        
+        </section>
+    </div>
+
+    
+
+    <div class="container">
+        <span class="mif-chevron-left mif-3x button"></span>
+
+        <nav>
+
+            <ul id="menu_principal">
+                <li><a href="#"><span class="mif-home mif-3x principais"></span>Início</a></li>
+
+                <li>
+                    <label for="drop-cursos">
+                        <span class="mif-books mif-3x principais"></span>
+                        Cursos
+                        <span class="mif-chevron-right mif-2x direita"></span>
+                        <span class="mif-expand-more mif-2x direita"></span>
+                    </label>
+                    <input type="checkbox" id="drop-cursos">
+
+                    <ul>
+                        <li>
+                            <label for="drop-cobranca">
+                                <span class="mif-chart-dots mif-2x"></span>
+                                Cobrança
+                                <span class="mif-chevron-right mif-2x direita"></span>
+                                <span class="mif-expand-more mif-2x direita"></span>
+                            </label>
+                            <input type="checkbox" id="drop-cobranca">
+
+                            <ul>
+                                <li>
+                                    <label for="drop-carteira">Carteira 1
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-carteira">
+                                    <ul>
+                                        <li><a href="../html/index2.html">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <label for="drop-carteira">Carteira 2
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-carteira">
+                                    <ul>
+                                        <li><a href="#">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <label for="drop-carteira">Carteira 3
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-carteira">
+                                    <ul>
+                                        <li><a href="#">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <label for="drop-carteira">Carteira 4
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-carteira">
+                                    <ul>
+                                        <li><a href="#">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <label for="drop-carteira">Carteira 5
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-carteira">
+
+                                    <ul>
+                                        <li><a href="#">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+                        <li>
+                            <label for="drop-juridico">
+                                <span class="mif-justice mif-2x"></span>
+                                Jurídico
+                                <span class="mif-chevron-right mif-2x direita"></span>
+                                <span class="mif-expand-more mif-2x direita"></span>
+                            </label>
+                            <input type="checkbox" id="drop-juridico">
+
+                            <ul>
+                                <li>
+                                    <label for="drop-cart-juridico"> Carteiras
+                                        <span class="mif-chevron-right mif-2x direita"></span>
+                                        <span class="mif-expand-more mif-2x direita"></span>
+                                    </label>
+                                    <input type="checkbox" id="drop-cart-juridico">
+
+
+                                    <ul>
+                                        <li><a href="#">Apresentações</a></li>
+                                        <li><a href="#">E-books</a></li>
+                                        <li><a href="#">Manuais</a></li>
+                                        <li><a href="#">Simulados</a></li>
+                                        <li><a href="#">Vídeos</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </li>
+
+                        <li>
+                            <label for="drop-rh">
+                                <span class="mif-organization mif-2x"></span>
+                                RH
+                                <span class="mif-chevron-right mif-2x direita"></span>
+                                <span class="mif-expand-more mif-2x direita"></span>
+                            </label>
+                            <input type="checkbox" id="drop-rh">
+
+                            <ul>
+                                <li><a href="#">Apresentações</a></li>
+                                <li><a href="#">Manuais</a></li>
+                                <li><a href="#">Vídeos</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <label for="drop-adm">
+                                <span class="mif-paste mif-2x"></span>
+                                Administração
+                                <span class="mif-chevron-right mif-2x direita"></span>
+                                <span class="mif-expand-more mif-2x direita"></span>
+                            </label>
+
+                            <input type="checkbox" id="drop-adm">
+
+                            <ul>
+                                <li><a href="#">Apresentações</a></li>
+                                <li><a href="#">Manuais</a></li>
+                                <li><a href="#">Vídeos</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+                <li>
+                    <label for="drop-ranking">
+                        <span class="mif-chart-bars mif-3x principais"></span>
+                        Ranking
+                        <span class="mif-chevron-right mif-2x direita"></span>
+                        <span class="mif-expand-more mif-2x direita"></span>
+                    </label>
+
+                    <input type="checkbox" id="drop-ranking">
+
+                    <ul>
+                        <li><a href="#">Medalhas (Pontuações)</a></li>
+                        <li><a href="#">Premiações</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <label for="drop-jornada">
+                        <span class="mif-medal mif-3x principais"></span>Minha Jornada
+                        <span class="mif-chevron-right mif-2x direita"></span>
+                        <span class="mif-expand-more mif-2x direita"></span>
+                    </label>
+
+                    <input type="checkbox" id="drop-jornada">
+
+                    <ul>
+                        <li><a href="#">Fases Concluídas</a></li>
+                        <li><a href="#">Medalhas</a></li>
+                        <li><a href="#">Pontuações / XP</a></li>
+                        <li><a href="#">Certificados</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div class="corpo">
+
+    </div>
+
+    <!--     <div class="footer">
+        <p><span class="mif-copyright mif-1g"></span> 2019 Góes & Nicoladelli Advogados Associados</p>
+    </div> -->
+
+    <script src="../js/main.js"></script>
+
+
+</body>
+
+</html>

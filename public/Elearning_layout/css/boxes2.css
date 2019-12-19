@@ -1,0 +1,324 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+
+
+.box {
+    color: #fff;
+    text-align: justify;
+    background-color: #fff;
+    margin: 100px 100px -80px 80px;
+    
+}
+
+.box::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 0;
+}
+
+.box-item {
+    width: 25%;
+    height: 80px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.box-item :hover {
+    color: orange;
+}
+
+.item-1 {
+    background-image: linear-gradient(to right, #c31432, #0089eb);
+}
+
+.item-2 {
+     background-image: linear-gradient(to right, #0089eb, #9e5394);
+}
+
+.item-3 {
+     background-image: linear-gradient(to right, #9e5394, #0093a2);
+}
+
+.xp {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 15px;
+    height: 2px;
+}
+
+.txt {
+   
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 15px;
+    font-size: 0.75em;
+}
+
+.icon {
+    margin-left: 80%;
+    margin-top: -15%;
+}
+
+/* div tabela e button-group */
+.table-container {
+    width: 66.66%;
+    margin-left: 5%;
+    margin-top: 10%;
+    float: left;
+}
+
+/* button-group ranking */
+.btn-group button {
+  background-color: #d3d3d3; /* Green background */
+  border: 1px solid white; /* Green border */
+  color: #000; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+  font-weight: bold;
+  margin-bottom: 20px;
+  
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #f3f3f3;
+}
+
+.btn-group button:focus{
+    background-color:#0093a2;
+}
+
+/* tabela */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  line-height: 0.75em;
+  
+}
+
+th, td {
+  text-align: center;
+  padding: 16px;
+  font-size: 1em;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+thead > tr, th {
+  text-align: center;
+  padding: 16px;
+  background-color: #d3d3d3;
+  color: #000;
+}
+
+table, th, td {
+    border: 1px solid #d3d3d3;
+}
+
+tr:hover {
+    background-color: #bdbdbd;
+}
+
+/* Caixa de progress bar presenças e faltas */
+
+.box-chamada {
+    background-color: #fff;
+    margin-right: 80px;
+    margin-left: 75%;
+    margin-top: 10%;
+    height: 230px;
+    line-height: 2.5em;
+    width: 19.5%;
+   
+}
+
+
+h4 {
+    margin-bottom: 0.5em; 
+    text-align: center;
+    
+}
+
+label[for='presenca'], label[for='inativo']  {
+    margin-left: 76%;
+    line-height: 0%;
+    margin-bottom: -8.5px;
+}
+
+.progress-1, .progress-2 {
+     position: relative;
+     display: block;
+     padding: 5px;
+     font-size: 8px;
+     line-height: 8px;
+     border-radius: 30px;
+     background: rgba(0, 0, 0, 0.1);
+     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+     margin-bottom: 2em;
+}
+
+.progress-1 span, .progress-2 span {
+     position: relative;
+     display: inline-block;
+     vertical-align: middle;
+     height: 8px;
+     border-radius: 10px 0 0 10px;
+     overflow: hidden;
+     background-color: #f56982;
+     background-size: 100%;
+     background-image: linear-gradient(to bottom, #f2395a, #b90c2b);
+     animation: progress-anim-1 10s infinite ease;
+     
+
+}
+
+.progress-1 span::after, .progress-2 span::after {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     content: "";
+     background-size: 100%;
+     background-image: linear-gradient(45deg, #ffffff 25%,
+                                      rgba(0, 0, 0, 0) 25%,
+                                      rgba(0, 0, 0, 0) 50%,
+                                      #ffffff 50%,
+                                      #ffffff 75%,
+                                      rgba(0, 0, 0, 0) 75%,
+                                      rgba(0, 0, 0, 0));
+     background-size: 30px 30px;
+     opacity: 0.3;   
+     animation:  progress-anim-1-after 0.5s infinite linear;
+
+}
+
+@-webkit-keyframes progress-anim-1 {
+     0% {
+       width: 20%;
+     }
+     100% {
+       width: 80%;
+     }
+     
+   }
+
+@keyframes progress-anim-1 {
+    0% {
+    width: 20%;
+    }
+    100% {
+    width: 80%;
+    }
+    
+}
+
+@-webkit-keyframes progress-anim-1-after {
+     0% {
+       background-position: 0 100%;
+     }
+     100% {
+       background-position: 30px 100%;
+     }
+   }
+   @keyframes progress-anim-1-after {
+     0% {
+       background-position: 0 100%;
+     }
+     100% {
+       background-position: 30px 100%;
+     }
+   }
+
+
+.tbl-ranking {
+    width: 23%;
+    margin-top: -37.5%;
+    margin-left: 75%;
+    position: relative;
+    line-height: 0.75em;
+}
+
+@media only screen and (max-width: 500px), handheld and (orientation: landscape) {
+    .box {
+    color: #fff;
+    text-align: justify;
+    background-color: #fff;
+    margin: 50px 25px;;
+    
+}
+
+.box::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 0;
+}
+
+.box-item {
+    width: 30%;
+    height: 80px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.item-1 {
+    background-image: linear-gradient(to right, #c31432, #0089eb);
+}
+
+.item-2 {
+     background-image: linear-gradient(to right, #0089eb, #9e5394);
+}
+
+.item-3 {
+     background-image: linear-gradient(to right, #9e5394, #0093a2);
+}
+
+.xp {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 15px;
+    height: 2px;
+    font-size: 1em
+}
+
+.txt {
+   
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 15px;
+    font-size: 1em;
+}
+
+.icon {
+    margin-left: 70%;
+    margin-top: -15%;
+    font-size: 0.75em;;
+}
+
+#exp, #cursos, #quiz {
+    font-size: 0.67em;
+}
+
+}
