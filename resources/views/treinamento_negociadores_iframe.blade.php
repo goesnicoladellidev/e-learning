@@ -166,8 +166,9 @@ function vid_start() {
 <script type="text/javascript">
   
    function pageRedirect(checked) { //REDIRECIONAR PARA ROTA UPDATE DB;
-
+    
       var checked2 = document.getElementById(checked);
       window.location.href = "http://elearning.goesnicoladelli.net/update_treinamento";
+
     }    
 </script>
