@@ -20,6 +20,8 @@
             <ul id="menu_principal">
                 <li><a href="http://elearning.goesnicoladelli.net/menu_inicial"><span class="mif-home mif-3x principais"></span>Início</a></li>
                 <li>
+
+
                     <label for="drop-cursos">
                         <span class="mif-books mif-3x principais"></span>
                         Cursos
@@ -38,7 +40,7 @@
                             <input type="checkbox" id="drop-cobranca">
 
                             <ul>
-                                <li><a href="http://elearning.goesnicoladelli.net/treinamento_negociadores_iframe/1/1">Negociadores</a></li>
+                                <li><a href="http://elearning.goesnicoladelli.net/treinamento_negociadores_iframe">Negociadores</a></li>
                                 <li><a href="#">Desbloquear</a></li>
                             </ul>
                         </li>

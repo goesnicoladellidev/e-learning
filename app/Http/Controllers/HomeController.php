@@ -75,7 +75,7 @@ class HomeController extends Controller
 
 
     if ($id_setor == '6') {
-   
+
     //quando setor for geral pega todas as carteiras de todos os setores;
     //ARRUMAR A LOGICA DISSO! 
     //QUANDO GERAL, NAO PRECISA SELECIONAR NENHUMA, PEGA AUTOMATICO TODOS;
@@ -116,7 +116,7 @@ public function rota_menu_inicial(){
     $check_user = DB::table("ranking_users")
     ->where('id_user',$user->id)
     ->get();
-
+    
     $tab_ranking = DB::table("ranking_users")
     ->orderby('points_user', 'desc')
     ->paginate(5);
@@ -256,43 +256,36 @@ public function rota_ranking(){
           break;
           default:
           break;
-
       }
 
       return $patente;
-
   }
 
-  public function rota_treinamentos_iframe($setor, $carteira)
+  public function rota_treinamentos_iframe()
   {
 
-    
-
     $user = auth::user();
-    $busca_cadastro  = DB::table("modulo_cadastro")
-      ->where('id_user', $user->id)
-      ->get(); 
-
-    $busca_cadastro2  = DB::table("modulo_cadastro")
-      ->where('id_user', '$user->id')
-      ->get(); 
+   
 
     $controller_modulo = DB::table('modulo_cadastro as a')
       ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
-      ->select('a.*','b.*','a.id as Id','a.modulo_num as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
+      ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
       ->where('b.id_user', '=', $user->id)
       ->get();
     
+
     $controller_modulo2 = DB::table('modulo_cadastro as a')
       ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
-      ->select('a.*','b.*','a.id as Id','a.modulo_num as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+      ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
       ->where('b.id_user', '=', $user->id)
       ->get();
+
 
     $verifica_modulos_existentes = DB::table('respostas_questionario as a')
     ->select('a.id_modulo as Modulos')
     ->distinct('a.id_modulo')
     ->get(); 
+
 
     //VERIFICAR ESSA FUNÇÃO / NÃO ESTÁ FUNCIONANDO 100%
     foreach ($verifica_modulos_existentes as $key => $value) {
@@ -300,7 +293,6 @@ public function rota_ranking(){
         $modulo[] =  array('index' => $value->Modulos );
 
      }
-
               $modulos_abertos = DB::table("modulo_controller")
               ->where('id_user', $user->id)
               ->where('modulo_concluido', 'N')
@@ -318,7 +310,6 @@ public function rota_ranking(){
                ->with('controller_modulo2', $controller_modulo2);
           }
 
-  
   public function rota_resp_questionario($id_setor, $id_carteira, $id){ 
   
            $input = Request::all();
@@ -522,23 +513,89 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
         $quantidade_perguntas = $qtd_perg; 
         $id_modulo = Request::input('num_modulo');
         $num_questao = 0;
-        //VERIFICA QTD NUM_QUESTAO
+        $aula_descricao = "descrição do input";
+        $arquivo_nome = "nomeArquivo";
+        $extensao_arquivo = "mp4"; 
+        $link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
+
+        //pega ultimo id
+        $last_id_insert_modulo = DB::table('modulo_cadastro')
+          ->select('id')
+          ->max('id');
+        
+        $id_cadastro = $last_id_insert_modulo +1; //cria id +1
+
+        //numero da questao;
         $numero_questao = DB::table('respostas_questionario_user')
          ->where('id', $user->id)
          ->get();
 
-        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
+
+           DB::table('modulo_cadastro')
+        ->insert([
+          'id' => $id_cadastro,
+          'id_setor' => $id_setor,
+          'id_carteira' => $id_carteira,
+          'id_modulo' => $id_cadastro,
+          'aula_descricao' => $aula_descricao,
+          'link_aula' => $link_aula,
+
+        ]);
+
+       
+     
+       //CONTROLA A VISIBILIDADE DO MODULO PELO CONTADOR COM QUANTIDADE DE MODULOS;
+       /*$count_modulos_cad = DB::table('modulo_cadastro as a')
+        ->join('modulo_controller as b', 'a.id_modulo','=','b.id_modulo_cadastrado')
+        ->where('id_setor', $id_setor)
+        ->where('id_carteira', $id_carteira)
+        ->where('id_modulo', $id_modulo)
+        ->count();*/
+
+        $count_modulos_cad2 = DB::table('modulo_cadastro')
+        ->where('id_setor', $id_setor)
+        ->where('id_carteira', $id_carteira)
+        ->where('id_modulo', $id_modulo)
+        ->max('id_modulo');
+
+        
+
+        
+
+// REVER ESSA VERIFICAÇÃO IF - CAINDO SEMPRE NULL;
+       if (empty($count_modulos_cad2) ) {
+          //dd("x");
+
+           DB::table('modulo_controller')
+            ->insert([
+            'id_user' => $user->id,
+            'id_modulo_cadastrado' => $last_id_insert_modulo,
+            'modulo_visibilidade' => 'S',
+            'modulo_concluido' => 'N'
+            ]);
+       }else{
+
+          DB::table('modulo_controller')
+            ->insert([
+            'id_user' => $user->id,
+            'id_modulo_cadastrado' => $last_id_insert_modulo,
+            'modulo_visibilidade' => 'N',
+            'modulo_concluido' => 'N'
+            ]);
+       }
+       
+       //NAO ESTA ADICIONANDO RESPOSTA PARA QUANDO SETOR/CARTEIRA NOVA, INEXISTENTE.
+       for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
          $verifica_qtd_questoes = DB::table('respostas_questionario')
-        ->where('id_modulo', $id_modulo)
-        ->where('id_setor', $id_setor)
-        ->where('id_modulo', $id_modulo)
-        ->max('num_questao');
+          ->where('id_modulo', $id_modulo)
+          ->where('id_setor', $id_setor)
+          ->where('id_modulo', $id_modulo)
+          ->max('num_questao');
 
-        if ($verifica_qtd_questoes <= 0 || empty($verifica_qtd_questoes)) {
-     
+        if ($verifica_qtd_questoes <= 0 || empty($verifica_qtd_questoes)) {     
             $num_questao = 1;
-
+            $num_questao += 1;
         }else{
 
              $num_questao = $verifica_qtd_questoes;
@@ -561,7 +618,9 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
        }if ($resposta_correta == "d") {
            $valor_resp_1 = "n";  $valor_resp_2 = "nn";  $valor_resp_3 = "nnn";  $valor_resp_4 = "s";          
        }
-
+     
+      //FAZER JOIN MODULO_CONTROLLER E MODULO CADASTRO, SE ID_SETOR/ CARTEIRA do modulo cadastrado tiver resultaod = count 1, PRIMEIRO MODULO ESTARA VISIVEL = S. se nao visivel = N
+      
       //BUSCAR O ULTIMO NUMERO DO MODULO ABERTO, INSERIR O PROXIMO VALOR;
 
        DB::table('respostas_questionario')

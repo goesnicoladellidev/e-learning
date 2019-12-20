@@ -29,7 +29,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/menu_inicial', 'HomeController@rota_menu_inicial')->name('treinamento_menu');
 
 //rota lições
-Route::get('/treinamento_negociadores_iframe/{setor}/{carteira}', 'HomeController@rota_treinamentos_iframe')->name('treinamento_negociadores_iframe');
+Route::get('/treinamento_negociadores_iframe/', 'HomeController@rota_treinamentos_iframe')->name('treinamento_negociadores_iframe');
 
 //Route::get('/treinamento_negociadores_iframe', 'HomeController@rota_treinamentos_iframe')->name('treinamento_negociadores_iframe');
 
