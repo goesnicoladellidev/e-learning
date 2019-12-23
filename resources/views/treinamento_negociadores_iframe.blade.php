@@ -3,7 +3,7 @@
 <html lang="pt-br">
 <body>
     <header id="top">
-        <form action="{{url('/treinamento_negociadores_iframe')}}" method="get" id="search" class="slide-fwd-left">
+        <form action="{{url('/treinamento_negociadores_iframe', [$id_setor, $id_carteira])}}" method="get" id="search" class="slide-fwd-left">
             <input type="search" placeholder="Buscar">
             <a href="http://elearning.goesnicoladelli.net/home">Usuário <span class="fa fa-user fa-lg"></span></a>
             <meta name="viewport" content="width=device-width, initial-scale=1">

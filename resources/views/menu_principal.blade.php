@@ -40,7 +40,7 @@
                             <input type="checkbox" id="drop-cobranca">
 
                             <ul>
-                                <li><a href="http://elearning.goesnicoladelli.net/treinamento_negociadores_iframe">Negociadores</a></li>
+                                <li><a href= {{url('/treinamento_negociadores_iframe/1/1')}} >Negociadores</a></li>
                                 <li><a href="#">Desbloquear</a></li>
                             </ul>
                         </li>
@@ -83,11 +83,11 @@
                                 <span class="mif-expand-more mif-2x direita"></span>
                             </label>
                             <input type="checkbox" id="drop-adm">
-                            <!-- <ul>
-                                <li><a href="#">Apresentações</a></li>
+                             <ul>
+                                <li><a href={{url('/treinamento_negociadores_iframe/5/13')}}>Adm</a></li>
                                 <li><a href="#">Manuais</a></li>
                                 <li><a href="#">Vídeos</a></li>
-                            </ul> -->
+                            </ul> 
                         </li>
                     </ul>
                 </li>

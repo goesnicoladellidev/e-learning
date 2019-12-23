@@ -112,7 +112,7 @@
 
             $.each(busca, function (key, value) {
 
-                $('select[id=carteira_cob1]').append('<option value=' + value.Id_setor + '>' + value.Nome_carteira + '</option>');
+                $('select[id=carteira_cob1]').append('<option value=' + value.Id_carteira + '>' + value.Nome_carteira + '</option>');
             });
         });
     });

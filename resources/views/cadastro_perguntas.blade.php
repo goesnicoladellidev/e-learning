@@ -33,10 +33,10 @@
 <label class="pull-left" style="margin-left: 25%" >Escolha Modulo .</label>
                 <select class="form-control" name="num_modulo" id="num_modulo" required="" >
                     <option value=""> Escolha Módulo</option>
-                @for($i=0; $i < $count_modulos; $i++)
-                <option value="{{$i+1}}"> Modulo {{$i+1}}</option>
+                @for($i=1; $i <= $count_modulos; $i++)
+                <option value="{{$i}}"> Modulo {{$i}}</option>
                 @endfor
-                <option value="{{$i+1}}"> ADICIONAR MÓDULO -> {{$i+1}}</option>
+                <option value="{{$i}}"> ADICIONAR MÓDULO -> {{$i}}</option>
                 </select>
             <br><br>
         <div>
