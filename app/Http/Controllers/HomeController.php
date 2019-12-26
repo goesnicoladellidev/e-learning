@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Request;
-use App\Http\Controller\Input;
+//use App\Http\Controller\Input;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Session;
@@ -17,6 +17,9 @@ use Storage;
 use Response;
 use App\FinanceiroDevedores;
 use Redirect;
+use Illuminate\Support\Facades\Input;
+
+
 
 
 class HomeController extends Controller
@@ -74,12 +77,11 @@ class HomeController extends Controller
    public function get_id_setor($id_setor)
    {
 
+     if ($id_setor == '6') {
 
-    if ($id_setor == '6') {
-
-    //quando setor for geral pega todas as carteiras de todos os setores;
-    //ARRUMAR A LOGICA DISSO! 
-    //QUANDO GERAL, NAO PRECISA SELECIONAR NENHUMA, PEGA AUTOMATICO TODOS;
+      //quando setor for geral pega todas as carteiras de todos os setores;
+      //ARRUMAR A LOGICA DISSO! 
+      //QUANDO GERAL, NAO PRECISA SELECIONAR NENHUMA, PEGA AUTOMATICO TODOS;
 
        $dados = DB::table('setor_tab as a')
       ->join('carteiras_tab as b','a.id','=','b.id_setor')
@@ -96,13 +98,15 @@ class HomeController extends Controller
       ->where('id_setor', $id_setor)
       ->orderBy('b.Nome_carteira','asc')
       ->get();
-  }
+      }
   return Response::JSON($dados);
 }
 
 public function rota_menu_inicial(){
 
     $user = auth::user();
+
+
     $valor_pontuacao = 0;
     $check_cursos_concluidos = DB::table("modulo_controller")
       ->where('id_user','=', $user->id) 
@@ -175,88 +179,68 @@ public function receber_premio(){
    $tab_premios =  DB::table("ranking_users")
     ->where('id_user', $user->id)
     ->get();
+
     //SE O VALOR DO PREMIO = 1 NO BANCO ENTÃO MUDA SPRITE E CONFIRMA QUE RECEBEU PREMIO;
-    $input = Request::all();
+   $input = Request::all();
     if (!empty($input['btn_premio_1'])) {
        
-       $premio_1 = $input['btn_premio_1'];
-
+       $premio_get = $input['btn_premio_1'];
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_1' => $premio_1
+         ->update([
+           'premio_1' => $premio_get
          ]);
         
     }else if (!empty($input['btn_premio_2'])) {
        
-       $premio_2 = $input['btn_premio_2']; 
-
+       $premio_get = $input['btn_premio_2']; 
+    
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_2' => $premio_2
+         ->update([
+           'premio_2' => $premio_get
          ]);
  
     }else if (!empty($input['btn_premio_3'])) {
        
-       $premio_3 = $input['btn_premio_3'];
+       $premio_get = $input['btn_premio_3'];
 
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_3' => $premio_3
+         ->update([
+           'premio_3' => $premio_get
          ]);
 
     }else if (!empty($input['btn_premio_4'])) {
        
-       $premio_4 = $input['btn_premio_4'];
+       $premio_get = $input['btn_premio_4'];
 
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_4' => $premio_4
+         ->update([
+           'premio_4' => $premio_get
          ]); 
    
     }else if (!empty($input['btn_premio_5'])) {
        
-       $premio_5 = $input['btn_premio_5'];
-
+       $premio_get = $input['btn_premio_5'];
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_5' => $premio_5
+         ->update([
+           'premio_5' => $premio_get
          ]);
-        
     }else if (!empty($input['btn_premio_6'])) {
        
-       $premio_6 = $input['btn_premio_6']; 
+       $premio_get = $input['btn_premio_6']; 
 
        $insere = DB::table('ranking_users')
          ->where('id_user', $user->id)
-         ->insert([
-           'premio_6' => $premio_6
+         ->update([
+           'premio_6' => $premio_get
          ]);
-        
     }
-    /*$premio_1 = $input['btn_premio_1'];
-    $premio_2 = $input['btn_premio_2']; 
-    $premio_3 = $input['btn_premio_3'];   
-    $premio_4 = $input['btn_premio_4'];
-    $premio_5 = $input['btn_premio_5'];
-    $premio_6 = $input['btn_premio_6'];*/
-    
-  
-   
 
-   /* switch () {
-      case 'value':
-        # code...
-        break;
-      
-      default:
-        # code...
-        break;
-    }*/
+    //COMO SERÁ COMUNICAÇÃO DE CONTROLE ENTRE GESTOR X COLABORADOR??.
 
    return back();
 }
@@ -268,22 +252,21 @@ public function rota_ranking(){
         $pegou_premiacao = false; // verifica se a premiacao liberada foi recebida;
         $premios = 0;
 
-        
-
-        $qtd_pontos = DB::table("ranking_users")
+        $tab_ranking = DB::table("ranking_users")
         ->where('id_user', $user->id)
         ->get();
 
         $modulos_concluidos = 0;
 
-        $pontuacao_total = $qtd_pontos[0]->points_user;
+        $pontuacao_total = $tab_ranking[0]->points_user;
 
         $premios = $this->verifica_premios_concluidos($pontuacao_total);
   
         return view('treinamento_ranking')
         ->with('pontuacao_total',$pontuacao_total)
         ->with('modulos_concluidos',$modulos_concluidos)
-        ->with('premios',$premios);
+        ->with('premios',$premios)
+        ->with('tab_ranking',$tab_ranking);
 
     }
 
@@ -377,15 +360,14 @@ public function rota_ranking(){
     ->distinct('a.id_modulo')
     ->get(); 
 
-
     //VERIFICAR ESSA FUNÇÃO / NÃO ESTÁ FUNCIONANDO 100%
     foreach ($verifica_modulos_existentes as $key => $value) {
 
         $modulo[] =  array('index' => $value->Modulos );
 
-     }  
+     }
 
-              $modulos_abertos = DB::table('modulo_cadastro as a')
+             $modulos_abertos = DB::table('modulo_cadastro as a')
               ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
               ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
               ->where('b.id_user', '=', $user->id)
@@ -394,7 +376,7 @@ public function rota_ranking(){
               ->where('modulo_concluido', 'N')
               ->get();
 
-              $modulos_concluidos = DB::table('modulo_cadastro as a')
+             $modulos_concluidos = DB::table('modulo_cadastro as a')
               ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
               ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
               ->where('b.id_user', '=', $user->id)
@@ -403,7 +385,6 @@ public function rota_ranking(){
               ->where('modulo_concluido', 'S')
               ->get();
 
-          
             return view('treinamento_negociadores_iframe')
                ->with('controller_modulo', $controller_modulo)
                ->with('controller_modulo2', $controller_modulo2)
@@ -440,23 +421,22 @@ public function result_respostas($id){
     $resp_correta = 0;
     $media_final = 0;
     $cont_resp = 0;
-    
 
     for ($i=1; $i <= $qtd_questoes ; $i++) { 
               
             if ($input['questao_'.$i] == 's' ) {
 
-            $resp_correta = $valor_nota;
-            $cont_resp = $cont_resp + 1;
-            $media_final = $media_final + $valor_nota;
+              $resp_correta = $valor_nota;
+              $cont_resp = $cont_resp + 1;
+              $media_final = $media_final + $valor_nota;
              
            }else{
 
-            $resp_correta = 0;
-            $cont_resp = $cont_resp + 0;
-            $media_final = $media_final + $resp_correta; 
-          }
+              $resp_correta = 0;
+              $cont_resp = $cont_resp + 0;
+              $media_final = $media_final + $resp_correta; 
 
+          }
         }
 
       if ($media_final >= $media_requisito) {
@@ -482,6 +462,7 @@ public function result_respostas($id){
           ->update([
            'media_questao_user' => $media_final,
            'qtd_acertos'  => $cont_resp
+
         ]);
       }
 
@@ -490,6 +471,7 @@ public function result_respostas($id){
       if ($media_final >= $media_requisito) {
         
          return Redirect('menu_inicial')->with('msg', "Você alcançou nota acima da média!");
+
       }
 
       return Redirect('menu_inicial');
@@ -502,14 +484,14 @@ public function result_respostas($id){
 
 }
 
-public function opcao_cadastros(){
+public function opcao_cadastros(Request $request){
 
     $id_setor = Request::input('setor_curso');
     $id_carteira = Request::input('carteira_cob1');
     $qtd_perguntas = Request::input('qtd_perguntas');
     $num_modulo = Request::input('num_modulo');
+
   
-    
     $count_modulos = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
@@ -526,18 +508,26 @@ public function opcao_cadastros(){
    ->with('count_modulos',$count_modulos);
 }
 
-public function cadastra_pergunta($setor, $carteira, $qtd_perg){ 
+
+
+public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request){ 
+
 
         $user = auth::user();
         $id_setor = $setor;
         $id_carteira = $carteira;
         $quantidade_perguntas = $qtd_perg; 
+
+        //salva arquivo porem nao possui dados, não esta recebendo request;
+        $arquivo = Storage::disk('elearning')->put('teste.mp4', $request);
+
         $id_modulo = Request::input('num_modulo');
         $num_questao = 0;
         $aula_descricao = "descrição do input";
         $arquivo_nome = "nomeArquivo";
         $extensao_arquivo = "mp4"; 
         $link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
+
 
         //pega ultimo id
         $last_id_insert_modulo = DB::table('modulo_cadastro')
@@ -572,7 +562,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
             ]);
 
              DB::table('modulo_controller')
-            ->insert([
+             ->insert([
               'id_user' => $user->id,
               'id_modulo_cadastrado' => $id_modulo,
               'modulo_visibilidade' => 'S',

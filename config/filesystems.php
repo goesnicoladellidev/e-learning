@@ -47,6 +47,10 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
+        'uploads' => [
+        'driver' => 'local',
+        'root'   => public_path() . '/Elearning_layout/treinamentos',
+    ],
 
         'public' => [
             'driver' => 'local',
@@ -54,6 +58,15 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+
+        'elearning' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/Elearning_layout/treinamentos',
+            'visibility' => 'public',
+        ],
+
+        
 
         's3' => [
             'driver' => 's3',

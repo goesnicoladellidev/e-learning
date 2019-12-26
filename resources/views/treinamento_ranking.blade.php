@@ -34,13 +34,22 @@
         </li>
  <br><br>
         </div>
-        @if($pontuacao_total >= 400 )
-        <li class="box-item item-1" style=" margin-left: 15%">
-            <p class="xp">400 pts</p><br>
-           <p class="txt" id="quiz">Recompensa: 1x Bombom  </p>
-            <p class="icon" style=" margin-left: 50%; margin-top: -20%">Latão<span class="fa fa-trophy fa-2x"></span></p>
-            <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_1" value="1"><img src=""></button>
-        </li>
+        @if($pontuacao_total >= 400)
+            @if($tab_ranking[0]->premio_1 == '0')
+                <li class="box-item item-1" style=" margin-left: 15%">
+                    <p class="xp">400 pts</p><br>
+                   <p class="txt" id="quiz">Recompensa: 1x Bombom  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Latão<span class="fa fa-trophy fa-2x"></span></p>
+                    <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_1" value="1"><img src=""></button>
+                </li>
+              @else
+                     <li class="box-item item-1" style=" margin-left: 15%">
+                    <p class="xp">400 pts</p><br>
+                   <p class="txt" id="quiz">Recompensa: 1x Bombom  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Latão<span class="fa fa-trophy fa-2x"></span></p>
+                    <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_1" value="1"><img src=""></button>
+                </li>
+                @endif
         @else
         <li class="box-item item-1" style=" margin-left: 15%">
             <p class="xp">400 pts</p><br>
@@ -50,12 +59,21 @@
         </li>
         @endif
         @if($pontuacao_total >= 800 )
-        <li class="box-item item-2">
-            <p class="xp" id="curso">800 pts</p><br>
-           <p class="txt" id="quiz">Recompensa: 2x Bombom  </p>
-            <p class="icon" style=" margin-left: 50%; margin-top: -20%">Bronze<span class="fa fa-trophy fa-2x"></span></p>
-              <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_2" value="1"></button>
-        </li>
+         @if($tab_ranking[0]->premio_2 == '0')
+            <li class="box-item item-2">
+                <p class="xp" id="curso">800 pts</p><br>
+               <p class="txt" id="quiz">Recompensa: 2x Bombom  </p>
+                <p class="icon" style=" margin-left: 50%; margin-top: -20%">Bronze<span class="fa fa-trophy fa-2x"></span></p>
+                  <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_2" value="1"></button>
+            </li>
+            @else
+            <li class="box-item item-2">
+                <p class="xp" id="curso">800 pts</p><br>
+               <p class="txt" id="quiz">Recompensa: 2x Bombom  </p>
+                <p class="icon" style=" margin-left: 50%; margin-top: -20%">Bronze<span class="fa fa-trophy fa-2x"></span></p>
+                  <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green'  name="btn_premio_2" value="1"></button>
+            </li>
+            @endif
         @else
         <li class="box-item item-2">
             <p class="xp" id="curso">800 pts</p><br>
@@ -65,12 +83,21 @@
         </li>
         @endif
         @if($pontuacao_total >= 1200 )
-        <li class="box-item item-3">
+             @if($tab_ranking[0]->premio_3 == '0')
+            <li class="box-item item-3">
+                <p class="xp">1200 pts</p><br>
+               <p class="txt" id="quiz">Recompensa: Caneta GN  </p>
+                <p class="icon" style=" margin-left: 50%; margin-top: -20%">Prata<span class="fa fa-trophy fa-2x"></span></p>
+                 <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_3" value="1" ></button>
+            </li>
+            @else
+             <li class="box-item item-3">
             <p class="xp">1200 pts</p><br>
            <p class="txt" id="quiz">Recompensa: Caneta GN  </p>
             <p class="icon" style=" margin-left: 50%; margin-top: -20%">Prata<span class="fa fa-trophy fa-2x"></span></p>
              <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_3" value="1" ></button>
-        </li>
+            </li>
+            @endif
         @else
          <li class="box-item item-3">
             <p class="xp">1200 pts</p><br>
@@ -82,12 +109,21 @@
     </ul>
      <ul class="box">
          @if($pontuacao_total >= 1600 )
-        <li class="box-item item-1" style=" margin-left: 15%">
+            @if($tab_ranking[0]->premio_4 == '0')
+            <li class="box-item item-1" style=" margin-left: 15%">
+                <p class="xp"> 1600 pts</p><br>
+                <p class="txt" id="quiz">Recompensa: Caneta e Agenda GN  </p>
+                <p class="icon" style=" margin-left: 50%; margin-top: -20%">Ouro<span class="fa fa-trophy fa-2x"></span></p>
+                 <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_4" value="1"></button>
+            </li>
+            @else
+            <li class="box-item item-1" style=" margin-left: 15%">
             <p class="xp"> 1600 pts</p><br>
             <p class="txt" id="quiz">Recompensa: Caneta e Agenda GN  </p>
             <p class="icon" style=" margin-left: 50%; margin-top: -20%">Ouro<span class="fa fa-trophy fa-2x"></span></p>
              <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_4" value="1"></button>
-        </li>
+            </li>
+            @endif
         @else
         <li class="box-item item-1" style=" margin-left: 15%">
             <p class="xp"> 1600 pts</p><br>
@@ -97,13 +133,22 @@
         </li>
         @endif
          @if($pontuacao_total >= 1800)
-        <li class="box-item item-2">
-            <p class="xp" id="curso"> 1800 pts</p><br>
-           <p class="txt" id="quiz">Recompensa: Almoço GN  </p>
-            <p class="icon" style=" margin-left: 50%; margin-top: -20%">Rubi<span class="fa fa-trophy fa-2x"></span></p>
-             <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_5" value="1"></button>
-        </li>
-        @else
+             @if($tab_ranking[0]->premio_5 == '0')
+                <li class="box-item item-2">
+                    <p class="xp" id="curso"> 1800 pts</p><br>
+                   <p class="txt" id="quiz">Recompensa: Almoço GN  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Rubi<span class="fa fa-trophy fa-2x"></span></p>
+                     <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_5" value="1"></button>
+                </li>
+            @else
+                 <li class="box-item item-2">
+                    <p class="xp" id="curso"> 1800 pts</p><br>
+                   <p class="txt" id="quiz">Recompensa: Almoço GN  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Rubi<span class="fa fa-trophy fa-2x"></span></p>
+                     <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_5" value="1"></button>
+                </li>   
+            @endif
+         @else
         <li class="box-item item-2">
             <p class="xp" id="curso"> 1800 pts</p><br>
            <p class="txt" id="quiz">Recompensa: Almoço GN  </p>
@@ -112,12 +157,21 @@
         </li>
         @endif
          @if($pontuacao_total >= 2000)
-        <li class="box-item item-3">
-            <p class="xp"> 2000 pts</p><br>
-            <p class="txt" id="quiz">Recompensa: Cruzeiro Tudo Pago GN  </p>
-            <p class="icon" style=" margin-left: 50%; margin-top: -20%">Diamante<span class="fa fa-trophy fa-2x"></span></p>
-               <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_6" value="1"></button>
-        </li>
+             @if($tab_ranking[0]->premio_6 == '0')
+                <li class="box-item item-3">
+                    <p class="xp"> 2000 pts</p><br>
+                    <p class="txt" id="quiz">Recompensa: Cruzeiro Tudo Pago GN  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Diamante<span class="fa fa-trophy fa-2x"></span></p>
+                       <button class='fas fa-gift' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_6" value="1"></button>
+                </li>
+            @else
+                <li class="box-item item-3">
+                    <p class="xp"> 2000 pts</p><br>
+                    <p class="txt" id="quiz">Recompensa: Cruzeiro Tudo Pago GN  </p>
+                    <p class="icon" style=" margin-left: 50%; margin-top: -20%">Diamante<span class="fa fa-trophy fa-2x"></span></p>
+                       <button class='fas fa-check-circle' style='font-size:48px;margin-left:80%;color:green' name="btn_premio_6" value="1"></button>
+                </li>
+            @endif
         @else
          <li class="box-item item-3">
             <p class="xp"> 2000 pts</p><br>

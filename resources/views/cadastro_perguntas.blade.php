@@ -46,6 +46,7 @@
         <div class="form-group">
 
 
+
             <div class="clearfix">
 
 
@@ -79,15 +80,26 @@
                                  <input type="radio" name="respostas_radio{{$i+1}}" value="c" id="respostas_quiz_c_{{$i+1}}" required=""/><input type="text" name="respostas_quiz_c_{{$i+1}}"required=""><br>
                                   <input type="radio" name="respostas_radio{{$i+1}}" value="d" id="respostas_quiz_d_{{$i+1}}" required=""/><input type="text" name="respostas_quiz_d_{{$i+1}}" required=""><br>
                               </td>
+
                             </tr>
                           @endfor
+
                         </div>
                     </tbody>
                 </table>
-            </div>
+            </div><div class="input file form-group col-md-5">
+                    <label for="" class="control-label col-md-15">
+                    SELECIONE ARQUIVO FORMATO: (.mp3/mp3/wmv) :</label>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="200000"/>
+                    <input type="file" name="arquivo_video" class="form-control" id="arquivo_video" style="width: 500px; height: 30px">
+                </div>
+
+
         </div>
     </div>
+
   <br>
+
              <div class="col-md-2" name="cadastrar" id="cadastrar" style=" margin-left: 48%; margin-top: 1%" >
                   <button class="btn btn-success"> Cadastrar </button><br><br>
              </div>

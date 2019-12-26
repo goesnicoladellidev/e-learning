@@ -14,11 +14,7 @@
         </form>
     </header>
 <section>
-  @if (session('msg'))
-    <div class="alert alert-success">
-        {{ session('msg') }}
-    </div>
-@endif
+ 
              <!--      ESSA FUNÇÃO troca frame       -->
              <!--    PRECISA ESCONDER ESSA DIV ON CLICK;     -->
        @foreach($controller_modulo as $key=>$controller_modulo)
@@ -28,6 +24,7 @@
                   Seu navegador não tem suporte para o formato mp4, escolha uma outra opção para navegar em nossa plataforma de ensino.
                 </video>
          </div>
+
          <div class="resume" id="iframe{{$controller_modulo->Modulo_num}}">
           <iframe name="iframe{{$controller_modulo->Modulo_num}}" width="750" height="750" src="/Elearning_layout/modulo_certo/story_html5.html" id="iframe{{$controller_modulo->Modulo_num}}"  style=" margin-left: 25%; margin-top: 2%" frameborder="0" allowfullscreen></iframe>
          </div>
@@ -38,6 +35,7 @@
     <h4 class="panel-title" style="margin-left: 1%">
         <a data-toggle="collapse" > Módulos - Treinamento Santander</a>
     </h4>
+    
  
   @foreach($controller_modulo2 as $key=>$controller_modulo)
   @if($controller_modulo->Modulo_visibilidade == "S")
@@ -78,7 +76,6 @@
     </div>
      @endif
    @endforeach
-
   </div>
 </div>
     </section>
