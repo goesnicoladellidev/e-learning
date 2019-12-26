@@ -15,7 +15,15 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 
+@if($errors->any())
+<h4>{{$errors->first()}}</h4>
+@endif]
 
+@if (session('msg'))
+    <div class="alert alert-success">
+        {{ session('msg') }}
+    </div>
+@endif
 <body>
     <header id="top">
         <form action="" id="search" class="slide-fwd-left">

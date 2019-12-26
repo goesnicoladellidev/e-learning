@@ -14,7 +14,11 @@
         </form>
     </header>
 <section>
-  
+  @if (session('msg'))
+    <div class="alert alert-success">
+        {{ session('msg') }}
+    </div>
+@endif
              <!--      ESSA FUNÇÃO troca frame       -->
              <!--    PRECISA ESCONDER ESSA DIV ON CLICK;     -->
        @foreach($controller_modulo as $key=>$controller_modulo)

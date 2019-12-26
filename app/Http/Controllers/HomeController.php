@@ -130,8 +130,8 @@ public function rota_menu_inicial(){
       $valor_pontuacao += $value->qtd_acertos;
    }
 
-   $pontos_quiz = ($valor_pontuacao * 100);
-   $valor_exp = ($valor_pontuacao * 45);
+   $pontos_quiz = ($valor_pontuacao * 200);
+   $valor_exp = ($valor_pontuacao * 85);
    $patente_check = $this->verifica_nivel($valor_exp);
 
   if (empty($check_user)) {
@@ -423,113 +423,78 @@ public function rota_ranking(){
             ->with('id',$id);
        }
 
-       //RESULTADO DO QUIZ
-  public function result_respostas($id) //passar mais parametros aqui!;
-       {
+public function result_respostas($id){
+  
+    $input = Request::all();
 
-          //INSERIR NOVO MÓDULO PRIMEIRO = MODULO_CADASTRO DEPOIS ANEXAR MODULO_CONTROLLER PARA VISIBILIDADE E UNIFICAR A PERGUNTA = RESPOSTA_QUESTIONARIO  DENTRO DO MÓDULO CRIADO;
-          //obs a questao 1 deve sempre ficar visivel inicialmente.
-           $input = Request::All();
-
-           $qtd_questoes = DB::table('respostas_questionario')
+    $qtd_questoes = DB::table('respostas_questionario')
             ->where('id_modulo_cadastrado', $id)
-            ->max('id_modulo_cadastrado');
+            ->count('id_modulo_cadastrado');
 
-           $media_requisito = ($qtd_questoes / 2);
+    $questionario = DB::table('respostas_questionario')
+     ->where('id_modulo_cadastrado', $id)
+     ->get();
 
-           $resp_correta_1 = 0;
-           $resp_correta_2 = 0;
-           $resp_correta_3 = 0;
-           $resp_correta_4 = 0;
+    $media_requisito = 5;
+    $valor_nota = (10 / $qtd_questoes);
+    $resp_correta = 0;
+    $media_final = 0;
+    $cont_resp = 0;
+    
 
-           if ($input['questao_1'] == 's' ) {
+    for ($i=1; $i <= $qtd_questoes ; $i++) { 
+              
+            if ($input['questao_'.$i] == 's' ) {
 
-               $resp_correta_1 = 2.5;
-               $cont_resp_1 = 1;
-
+            $resp_correta = $valor_nota;
+            $cont_resp = $cont_resp + 1;
+            $media_final = $media_final + $valor_nota;
+             
            }else{
 
-            $resp_correta_1 = 0;
-            $cont_resp_1 = 0;
+            $resp_correta = 0;
+            $cont_resp = $cont_resp + 0;
+            $media_final = $media_final + $resp_correta; 
+          }
 
         }
-        if ($input['questao_2'] == 's' ) {
 
-           $resp_correta_2 = 2.5;
-           $cont_resp_2 = 1;
+      if ($media_final >= $media_requisito) {
 
-       }else{
+         DB::table('modulo_controller')->where('id_modulo_cadastrado', $id) 
 
-        $resp_correta_2 = 0;
-        $cont_resp_2 = 0;
-
-    }
-    if ($input['questao_3'] == 's' ) {
-
-       $resp_correta_3 = 2.5;
-       $cont_resp_3 = 1;
-
-   }else{
-
-    $resp_correta_3 = 0;
-    $cont_resp_3 = 0;
-
-}
-if ($input['questao_4'] == 's' ) {
-
-   $resp_correta_4 = 2.5;
-   $cont_resp_4 = 1;
-
-}else{
-
-    $resp_correta_4 = 0;
-    $cont_resp_4 = 0;
-
-}
-
-$media_nota_usuario = $resp_correta_1 + $resp_correta_2 + $resp_correta_3 + $resp_correta_4; 
-
-$qtd_acertos = $cont_resp_1 + $cont_resp_2 + $cont_resp_3 + $cont_resp_4;
-
-    if ($media_nota_usuario >= $media_requisito) {
-   
-            //BUSCA WHERE DEVE SER ALTERADA de 'id',id para id_modulo;
-            //precisa ser criada uma tabela onde armazena os modulos genéricos e perguntas genericas.
-             DB::table('modulo_controller')->where('id', $id) //valor na fecha pq id modulo deve ser igual numero da questao;
              ->update([
                'modulo_concluido'  => 'S',
                'modulo_visibilidade'  => 'S',
-               'media_questao_user' => $media_nota_usuario,
-               'qtd_acertos'  => $qtd_acertos
+               'media_questao_user' => $media_final,
+               'qtd_acertos'  => $cont_resp
            ]);
 
              $id += 1;
 
-             DB::table('modulo_controller')->where('id', $id)
+             DB::table('modulo_controller')->where('id_modulo_cadastrado', $id)
              ->update([
-
                'modulo_visibilidade'  => 'S'
-
            ]);
          }else{
 
-          DB::table('modulo_controller')->where('id', $id)
+          DB::table('modulo_controller')->where('id_modulo_cadastrado', $id)
           ->update([
-           'media_questao_user' => $media_nota_usuario,
-           'qtd_acertos'  => $qtd_acertos
+           'media_questao_user' => $media_final,
+           'qtd_acertos'  => $cont_resp
         ]);
       }
 
-      $tab_questionario = DB::table("respostas_questionario")
-      ->where('id_modulo_cadastrado', $id)
-      ->get();
-
       $this->rota_menu_inicial();
 
-      return Redirect('treinamento_negociadores_iframe')
-      ->with('id', $id);
+      if ($media_final >= $media_requisito) {
+        
+         return Redirect('menu_inicial')->with('msg', "Você alcançou nota acima da média!");
+      }
 
-  }
+      return Redirect('menu_inicial');
+
+}
 
   public function cadastro_cursos(){
 
@@ -543,7 +508,7 @@ public function opcao_cadastros(){
     $id_carteira = Request::input('carteira_cob1');
     $qtd_perguntas = Request::input('qtd_perguntas');
     $num_modulo = Request::input('num_modulo');
-   // $id_modulo = 1;  //ESTA NA FUNCAO ERRADA ; DEVE ESTAR NA FUNCAO CADASTRA_PERGUNTAS;
+  
     
     $count_modulos = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
@@ -593,7 +558,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
          ->get();
         
        if (empty($exist_modulo)) {
-           //dd('x');
+      
           DB::table('modulo_cadastro')
             ->insert([
 
@@ -636,7 +601,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
 
             $num_questao = 1;
            
-
         }else{
 
              $num_questao = $verifica_qtd_questoes;
@@ -703,14 +667,12 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
 
 }
 
-
     public function media_nota($qtd_pergtas,$setor, $cart, $modulo){
         $input = Request::All();
         $id_setor = $setor;
         $qtd_perguntas = $qtd_pergtas;
         $id_carteira = $cart;
         $id_modulo = $modulo;
-        $requisito_media = ($qtd_perguntas/2);
-
+        $requisito_media = ($qtd_perguntas / 2);
      }
 }
