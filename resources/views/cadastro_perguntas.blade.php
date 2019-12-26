@@ -98,7 +98,6 @@
     <script src="/Elearning_layout/js/main.js"></script>
  </body>
 </html>
-
 <script>
     var i = 0;
     function buttonClick() {

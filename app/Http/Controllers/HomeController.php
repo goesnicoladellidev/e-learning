@@ -355,21 +355,21 @@ public function rota_ranking(){
     $user = auth::user();
 
     $controller_modulo = DB::table('modulo_cadastro as a')
-      ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
+      ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
       ->where('b.id_user', '=', $user->id)
       ->where('id_setor',$id_setor)
+      ->orderby('a.id_modulo', 'asc')
       ->get();
-    // dd($controller_modulo);
     
     $controller_modulo2 = DB::table('modulo_cadastro as a')
-      ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
+      ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
       ->where('b.id_user', '=', $user->id)
       ->where('id_setor',$id_setor)
       ->where('id_carteira', $id_carteira)
+      ->orderby('a.id_modulo', 'asc')
       ->get();
-
 
       //WHERE SETOR E CARTEIRA 
     $verifica_modulos_existentes = DB::table('respostas_questionario as a')
@@ -543,58 +543,15 @@ public function opcao_cadastros(){
     $id_carteira = Request::input('carteira_cob1');
     $qtd_perguntas = Request::input('qtd_perguntas');
     $num_modulo = Request::input('num_modulo');
-    $id_modulo = 1;  //ESTA NA FUNCAO ERRADA ; DEVE ESTAR NA FUNCAO CADASTRA_PERGUNTAS;
+   // $id_modulo = 1;  //ESTA NA FUNCAO ERRADA ; DEVE ESTAR NA FUNCAO CADASTRA_PERGUNTAS;
     
     $count_modulos = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
         ->count();
-//dd($count_modulos,$num_modulo);
+
     $base_setores = DB::table('setor_tab') 
      ->get();   
-
-    /*$verifica_qtd_questoes = DB::table('respostas_questionario')
-    ->where('id_setor',$id_setor)
-    ->where('id_carteira', $id_carteira)
-    ->where('id_modulo', $count_modulos)
-    ->count();   
-
-//dd($verifica_qtd_questoes);
-    if ($id_setor == 6) {
-
-      $verifica_cad = DB::table('respostas_questionario_user')
-        ->whereIN('id_setor',  array(1,2,3,4,5)) //todos os setores puxar do banco - melhorar codigo.
-        ->get();
-
-    }else
-        {
-          $verifica_cad = DB::table('respostas_questionario_user')
-          ->where('id_setor', $id_setor)
-          ->get();
-        }
-
-    if (empty($verifica_cad)) {
-
-      DB::table('respostas_questionario_user')
-        ->insert([
-
-            'qtd_perguntas' => $qtd_perguntas,
-            'id_modulo' => $id_modulo,
-            'aux_setor_id' => $id_setor
-
-        ]);
-
-    }else{
-
-       //SE JÁ EXISTE FAZ UPDATE APENAS NA QUANTIDADE.
-       DB::table('respostas_questionario_user')
-       ->where('id_setor', $id_setor)
-       ->where('id_modulo', $id_modulo)
-       ->update([
-           'qtd_perguntas' => $qtd_perguntas,
-           'aux_setor_id' => $id_setor
-       ]);
-   }*/
 
    return view('cadastro_perguntas')
   // ->with('num_questao', $verifica_qtd_questoes)
@@ -625,18 +582,15 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
         $id_cadastro = $last_id_insert_modulo +1; //cria id +1
 
         //numero da questao;
-         $exist_modulo = DB::table('modulo_cadastro')
+        $exist_modulo = DB::table('modulo_cadastro')
          ->where('id_setor',$id_setor)
          ->where('id_carteira', $id_carteira)
-        ->where('id_modulo', $id_modulo)
-        ->first();
-
+         ->where('id_modulo', $id_modulo)
+         ->first();
         
-
         $numero_questao = DB::table('respostas_questionario_user')
          ->where('id', $user->id)
          ->get();
-        
         
        if (empty($exist_modulo)) {
            //dd('x');
@@ -652,14 +606,13 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
 
             ]);
 
-
              DB::table('modulo_controller')
             ->insert([
               'id_user' => $user->id,
               'id_modulo_cadastrado' => $id_modulo,
               'modulo_visibilidade' => 'S',
               'modulo_concluido' => 'N'
-          ]);
+           ]);
 
           }
 
@@ -669,38 +622,20 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
         ->where('id_modulo', $id_modulo)
         ->max('id_modulo');
 
-        //dd($exist_modulo,$count_modulos_cad2,$id_carteira, $id_modulo,$id_cadastro);
-       //dd($count_modulos_cad2);
   //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
-       if (empty($count_modulos_cad2)) {
-   
-          
-
-       }/*else{
-
-          DB::table('modulo_controller')
-            ->insert([
-              'id_user' => $user->id,
-              'id_modulo_cadastrado' => $id_modulo,
-              'modulo_visibilidade' => 'S',
-              'modulo_concluido' => 'N'
-
-            ]);
-       }*/
-
-       //NAO ESTA ADICIONANDO RESPOSTA PARA QUANDO SETOR/CARTEIRA NOVA, INEXISTENTE.
+      
        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
          $verifica_qtd_questoes = DB::table('respostas_questionario')
           ->where('id_modulo_cadastrado', $id_modulo)
           ->where('id_setor', $id_setor)
-          
+          ->where('id_carteira', $id_carteira)
           ->max('num_questao');
 
         if ($verifica_qtd_questoes <= 0 || empty($verifica_qtd_questoes)) { 
 
             $num_questao = 1;
-            $num_questao += 1;
+           
 
         }else{
 
@@ -768,8 +703,8 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg){
 
 }
 
-    public function media_nota($qtd_pergtas,$setor, $cart, $modulo){
 
+    public function media_nota($qtd_pergtas,$setor, $cart, $modulo){
         $input = Request::All();
         $id_setor = $setor;
         $qtd_perguntas = $qtd_pergtas;
