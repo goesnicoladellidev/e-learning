@@ -57,6 +57,11 @@ class HomeController extends Controller
        return view('cadastro_perguntas');
    }
 
+   public function rota_upload_videos(){
+
+    return view('upload_videos');
+   }
+
    public function rota_cadastrar_curso(){
 
        $setor = Request::input('setor_curso');
@@ -342,6 +347,7 @@ public function rota_ranking(){
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
       ->where('b.id_user', '=', $user->id)
       ->where('id_setor',$id_setor)
+      ->where('id_carteira',$id_carteira)
       ->orderby('a.id_modulo', 'asc')
       ->get();
     
@@ -516,11 +522,9 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $user = auth::user();
         $id_setor = $setor;
         $id_carteira = $carteira;
-        $quantidade_perguntas = $qtd_perg; 
-
+        $quantidade_perguntas = $qtd_perg;
         //salva arquivo porem nao possui dados, não esta recebendo request;
-        $arquivo = Storage::disk('elearning')->put('teste.mp4', $request);
-
+        // $arquivo = Storage::disk('elearning')->put('teste.mp4', $request);
         $id_modulo = Request::input('num_modulo');
         $num_questao = 0;
         $aula_descricao = "descrição do input";
@@ -528,8 +532,8 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $extensao_arquivo = "mp4"; 
         $link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
 
-
         //pega ultimo id
+
         $last_id_insert_modulo = DB::table('modulo_cadastro')
           ->select('id')
           ->max('id');
@@ -547,6 +551,29 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
          ->where('id', $user->id)
          ->get();
         
+         //se quantidade de perguntas for igual quantidade de acertos, cria modulo visivivel se nao cria modulo invisivel.
+
+        $cont_modulos = DB::table('modulo_cadastro as a')
+          ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+          ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
+          ->where('b.id_user', '=', $user->id)
+          ->where('id_setor',$id_setor)
+          ->where('id_carteira',$id_carteira)
+          ->count();
+
+        $modulo_concluidos = DB::table('modulo_cadastro as a')
+            ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+            ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+            ->where('b.id_user', '=', $user->id)
+            ->where('id_setor',$id_setor)
+            ->where('id_carteira', $id_carteira)
+            ->where('b.qtd_acertos', 1)
+            ->orderby('a.id_modulo', 'asc')
+            ->count();
+
+
+          //dd($modulo_concluidos);
+
        if (empty($exist_modulo)) {
       
           DB::table('modulo_cadastro')
@@ -561,13 +588,27 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
             ]);
 
+          if ($modulo_concluidos == $cont_modulos){
+            
              DB::table('modulo_controller')
              ->insert([
               'id_user' => $user->id,
               'id_modulo_cadastrado' => $id_modulo,
               'modulo_visibilidade' => 'S',
               'modulo_concluido' => 'N'
-           ]);
+            ]);
+
+           }else{
+
+             DB::table('modulo_controller')
+             ->insert([
+              'id_user' => $user->id,
+              'id_modulo_cadastrado' => $id_modulo,
+              'modulo_visibilidade' => 'N',
+              'modulo_concluido' => 'N'
+            ]);
+
+           }
 
           }
 
@@ -578,7 +619,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         ->max('id_modulo');
 
   //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
-      
+
        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
          $verifica_qtd_questoes = DB::table('respostas_questionario')
@@ -595,6 +636,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
              $num_questao = $verifica_qtd_questoes;
              $num_questao += 1;
+
         }
 
          $perguntas_quiz = Request::input('pergunta_quiz_'.$i);
@@ -604,7 +646,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
          $respostas_quiz_2 = Request::input('respostas_quiz_b_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
          $respostas_quiz_3 = Request::input('respostas_quiz_c_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
          $respostas_quiz_4 = Request::input('respostas_quiz_d_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
-        if ($resposta_correta == "a") {
+        if ($resposta_correta == "a"){
            $valor_resp_1 = "s";  $valor_resp_2 = "n";  $valor_resp_3 = "nn";  $valor_resp_4 = "nnn";            
        }if ($resposta_correta == "b") {
            $valor_resp_1 = "n";  $valor_resp_2 = "s";  $valor_resp_3 = "nn";  $valor_resp_4 = "nnn";           
@@ -650,19 +692,15 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        ->orderby('nome_carteira', 'asc')
        ->get();
 
-       var_dump($resposta_correta,$valor_resp_1,$valor_resp_2,$valor_resp_3,$valor_resp_4);
+       //var_dump($resposta_correta,$valor_resp_1,$valor_resp_2,$valor_resp_3,$valor_resp_4);
    }
+//dd('teste');
+     return view('upload_videos')
+     ->with('id_setor', $id_setor)
+     ->with('id_carteira', $id_carteira)
+     ->with('id_modulo', $id_modulo);
+  }
 
-     die();
+  //obs : armazenamento dos arquivos estão no controller ArquivosController;
 
-}
-
-    public function media_nota($qtd_pergtas,$setor, $cart, $modulo){
-        $input = Request::All();
-        $id_setor = $setor;
-        $qtd_perguntas = $qtd_pergtas;
-        $id_carteira = $cart;
-        $id_modulo = $modulo;
-        $requisito_media = ($qtd_perguntas / 2);
-     }
 }
