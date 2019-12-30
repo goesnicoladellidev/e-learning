@@ -24,6 +24,10 @@
             </div>
     </header>
 <br>
+@if (Session::has('message'))
+   <div class="alert alert-info">{{ Session::get('message') }}</div>
+@endif
+
 <div class="container-fluid">
         <div class="col-md-4">
          <form method="get" action="{{ url('/opcao_cadastros') }}">

@@ -523,8 +523,10 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $id_setor = $setor;
         $id_carteira = $carteira;
         $quantidade_perguntas = $qtd_perg;
+
         //salva arquivo porem nao possui dados, não esta recebendo request;
         // $arquivo = Storage::disk('elearning')->put('teste.mp4', $request);
+
         $id_modulo = Request::input('num_modulo');
         $num_questao = 0;
         $aula_descricao = "descrição do input";
@@ -532,15 +534,12 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $extensao_arquivo = "mp4"; 
         $link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
 
-        //pega ultimo id
-
         $last_id_insert_modulo = DB::table('modulo_cadastro')
           ->select('id')
           ->max('id');
         
         $id_cadastro = $last_id_insert_modulo +1; //cria id +1
 
-        //numero da questao;
         $exist_modulo = DB::table('modulo_cadastro')
          ->where('id_setor',$id_setor)
          ->where('id_carteira', $id_carteira)
@@ -570,12 +569,10 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
             ->where('b.qtd_acertos', 1)
             ->orderby('a.id_modulo', 'asc')
             ->count();
-
-
-          //dd($modulo_concluidos);
-
+          
+       //SE MODULO FOR NOVO ENTÃO VAI PARA A BLADE ANEXAR MATERIAIS VIDEO/FOTO/SLIDES, SE NÃO CADASTRA PERGUNTAS NORMALMENTE.
        if (empty($exist_modulo)) {
-      
+        
           DB::table('modulo_cadastro')
             ->insert([
 
@@ -589,7 +586,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
             ]);
 
           if ($modulo_concluidos == $cont_modulos){
-            
+
              DB::table('modulo_controller')
              ->insert([
               'id_user' => $user->id,
@@ -607,18 +604,16 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
               'modulo_visibilidade' => 'N',
               'modulo_concluido' => 'N'
             ]);
-
            }
-
           }
 
-        $count_modulos_cad2 = DB::table('modulo_cadastro')
+       $count_modulos_cad2 = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
         ->where('id_modulo', $id_modulo)
         ->max('id_modulo');
 
-  //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
+       //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
 
        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
@@ -630,7 +625,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
         if ($verifica_qtd_questoes <= 0 || empty($verifica_qtd_questoes)) { 
 
-            $num_questao = 1;
+          $num_questao = 1;
            
         }else{
 
@@ -656,7 +651,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
            $valor_resp_1 = "n";  $valor_resp_2 = "nn";  $valor_resp_3 = "nnn";  $valor_resp_4 = "s";          
        }
      
-      //FAZER JOIN MODULO_CONTROLLER E MODULO CADASTRO, SE ID_SETOR/ CARTEIRA do modulo cadastrado tiver resultaod = count 1, PRIMEIRO MODULO ESTARA VISIVEL = S. se nao visivel = N
       
       //BUSCAR O ULTIMO NUMERO DO MODULO ABERTO, INSERIR O PROXIMO VALOR;
 
@@ -692,13 +686,23 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        ->orderby('nome_carteira', 'asc')
        ->get();
 
-       //var_dump($resposta_correta,$valor_resp_1,$valor_resp_2,$valor_resp_3,$valor_resp_4);
    }
-//dd('teste');
-     return view('upload_videos')
+
+    if (empty($exist_modulo)) {  
+      
+      return view('upload_videos')
      ->with('id_setor', $id_setor)
      ->with('id_carteira', $id_carteira)
      ->with('id_modulo', $id_modulo);
+    }
+
+     //return view('cadastrar_curso')
+     return view('upload_videos')
+     ->with('id_setor', $id_setor)
+     ->with('cursos_setor', $cursos_setor)
+     ->with('id_carteira', $id_carteira)
+     ->with('id_modulo', $id_modulo);
+     
   }
 
   //obs : armazenamento dos arquivos estão no controller ArquivosController;

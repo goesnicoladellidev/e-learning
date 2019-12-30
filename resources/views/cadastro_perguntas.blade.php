@@ -24,7 +24,10 @@
                 <a href=""><span class="fa fa-sign-out fa-lg"></span></a>
             </div>
     </header>
-<br>
+
+
+
+
 <div class="container-fluid">
         <div class="col-md-4">
          <form method="get" action="{{ url('/cadastra_pergunta', [$id_setor, $id_carteira, $qtd_perguntas]) }}">

@@ -39,30 +39,46 @@ class ArquivosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         
-       /*$this->validate($request, [
-        'file'  => 'mimes:mp4,mov,ogg,qt | max:20000000'
-    ]);
-         */
-          
-           /* ini_set('max_file_uploads', 50);
-            ini_set('post_max_size', 10);
-            ini_set('memory_limit', 32);*/
-    
+        $id_setor = $request->id_setor;
+        $id_carteira = $request->id_carteira;
+        $id_modulo = $request->id_modulo;
+
+        if ($request->file('arquivo') != null) {
+               
             $ext = $request->file('arquivo')->getClientOriginalExtension();
 
             $nome_comple = $request->file('arquivo')->getClientOriginalName();
-            //$name2 = pathinfo($name);
             $nome = explode('.', $nome_comple);
-            //dd($nome[0]);
 
             $arquivo = new Arquivos();
-            $arquivo->descricao = $request->descricao;
-            $arquivo->url = $request->file('arquivo')->storeAs('imagens',$nome[0].'.'.$ext,'local');
+            $arquivo->id_setor = $id_setor;
+            $arquivo->id_cart = $id_cart;
+            $arquivo->id_modulo = $id_modulo;
+            $arquivo->aula_descricao = $request->descricao;
+            $arquivo->link_aula = $request->file('arquivo')->storeAs('imagens',$nome[0].'.'.$ext,'local');
             $arquivo->save();
+            $msg = "Arquivo enviado com Sucesso!";
+
+            }else{
+
+
+                $url_video = $request->input('url');
+                $arquivo = new Arquivos();
+                $arquivo->id_setor = $id_setor;
+                $arquivo->id_carteira = $id_carteira;
+                $arquivo->id_modulo = $id_modulo;
+                $arquivo->aula_descricao = $request->descricao;
+                $arquivo->link_aula = $url_video;
+                $arquivo->save();
+
+                $msg = "Cadastro Realizado com Sucesso!";
+            }
             
-            $msg = "Arquivo enviado com sucesso";
+           
+             
+            
       //return parent::render($request, $exception);
        return redirect()->back()->with('mensagem',$msg);
     }

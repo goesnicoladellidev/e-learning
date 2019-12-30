@@ -22,6 +22,7 @@ Route::get('/login_ead', [
 	'middleware' => 'auth',
 	'uses' => 'HomeController@rota_treinamentos'
 ]);*/
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -46,9 +47,10 @@ Route::get('/opcao_cadastros', 'HomeController@opcao_cadastros')->name('cadastro
 
 Route::get('/cadastra_pergunta/{setor}/{carteira}/{qtd_perg}', 'HomeController@cadastra_pergunta')->name('cadastra_pergunta');
 
-Route::get('/upload_videos', 'HomeController@rota_upload_videos')->name('rota_upload_videos');
-
+/*Route::get('/upload_videos', 'HomeController@rota_upload_videos')->name('rota_upload_videos');
+*/
 Route::resource('/arquivo', "ArquivosController", ['names'=>['store'=>'upload']]);
+
 // NAME VIEW DEVE RECEBER OUTRA, NAO PODE FICAR cadastro_perguntas
 /*Route::get('/cadastrar_perg/{setor}/{carteira}/{qtd_perg}','HomeController@cadastrar_perg')->name('cadastro_perguntas');*/
 /*-------------------------------------------------------------------*/

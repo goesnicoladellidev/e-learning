@@ -50,13 +50,21 @@
 
                         <tr>
                          <td style="text-align: left;" colspan="2">
-                                <strong>  Selecione um Arquivo no formato: mp4  </strong>
+                                <strong>  Selecione uma opção de anexo:  </strong>
                             </td>
                         </tr>
                         @section('content')
 <div class="row" style="margin-left: 180%; margin-top: 110%">
-    <div class="">
-    <h2>Upload</h2>
+
+
+
+    <div class="" style="width: 500px; height: 100px;">
+    <h2>Anexar Arquivos / URL :</h2>
+    <br>
+    <button onclick="myFunction()" style="width:80px;height:60px;">Anexar Video/URL</button>
+    <br><br>
+    <button onclick="myFunction2()" style="width:80px;height:60px;" >Anexar Arquivo</button>
+    <br><br>
     @if ($errors->any())
     <div class="alert alert-danger" >
         <ul>
@@ -67,21 +75,29 @@
     </div>
     @endif
     @if(Session('mensagem'))
-    <div class="alert alert-info">
+    <div class="alert alert-info" style="width: 500px; height: 500px">
         {{Session('mensagem')}}
     </div>
     @endif
-        <form action="{{route('upload')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('upload', ['id_setor'=>$id_setor, 'id_carteira'=>$id_carteira,'id_modulo'=>$id_modulo]) }}" method="post" enctype="multipart/form-data">
             {{csrf_field()}}
-            <div class="form-group">
+            <div class="form-group" style="display: none" id="video">
                 <label for="arquivo">Arquivo:</label>
                 <input type="file" name="arquivo" id="arquivo" class="form-control">
             </div>
-            <div class="form-group">
+            <br>
+            <div class="form-group" style="display: none" id="url">
+                <label for="arquivo">Url Video:</label>
+                <input type="text" name="url" id="url" class="form-control">
+            </div>
+            <br>
+            <div class="form-group" style="display: none;" id="desc">
                 <label for="descricao">Descrição:</label>
                 <input type="text" name="descricao" id="descricao" class="form-control">
+                <br><br>
+            <button type="submit" class="btn btn-sm btn-primary">Enviar</button>
             </div>
-            <button type="submit" class="btn btn-sm btn-priamry">Enviar</button>
+            
         </form>
     </div>
 </div>
@@ -109,6 +125,38 @@
     }
 </script>
 <script type="text/javascript">
+</script>
+
+<script>
+function myFunction2() {
+
+  var x = document.getElementById("video");
+  var y = document.getElementById("url");
+  var z = document.getElementById("desc");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    z.style.display = "block";
+    y.style.display = "none";
+   $('#url :input').attr('disabled', true);
+   $('#video :input').attr('disabled', false);
+  } 
+}
+</script>
+<script>
+function myFunction() {
+  var x = document.getElementById("url");
+  var y = document.getElementById("video");
+  var z = document.getElementById("desc");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    z.style.display = "block";
+    y.style.display = "none";
+    $('#video :input').attr('disabled', true);
+    $('#url :input').attr('disabled', false);
+  } 
+}
 </script>
 @section('scripts')
 @endsection
