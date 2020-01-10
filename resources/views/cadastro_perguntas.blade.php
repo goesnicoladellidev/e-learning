@@ -34,9 +34,10 @@
 <div class="container-fluid">
         <div class="col-md-4">
          <form method="get" action="{{ url('/cadastra_pergunta', [$id_setor, $id_carteira, $qtd_perguntas]) }}">
-       @if ($count_modulos != 0)
-        <h1 class="pull-left" style="margin-left: 38%"> Cadastro de Perguntas Quiz </h1>
+    <h1 class="pull-left" style="margin-left: 38%"> Cadastro de Perguntas Quiz </h1>
         <br><br><br><br>
+       @if ($count_modulos != 0)
+       
 <label class="pull-left" style="margin-left: 25%" >Escolha Modulo .</label>
                 <select class="form-control" name="num_modulo" id="num_modulo" required="" >
                     <option value=""> Escolha Módulo</option>
@@ -55,7 +56,6 @@
 
 
             <div class="clearfix">
-
 
                 <table class="table table-striped table-responsive table-bordered" style="width:50% margin-left 20%">
                     <thead>
@@ -90,13 +90,45 @@
 
                             </tr>
                           @endfor
-
                         </div>
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
+    @if ($errors->any())
+    
+    <div class="alert alert-danger" >
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    @if(Session('mensagem'))
+    <div class="alert alert-info" style="width: 500px; height: 500px">
+        {{Session('mensagem')}}
+    </div>
+    @endif
+    
+            {{csrf_field()}}
+
+            
+            <br>
+            
+            <div class="form-group"  id="url" style="margin-right: 40%">
+                <label for="arquivo">Url Video:</label>
+                <input type="text" name="url" id="url" class="form-control">
+            </div>
+            <br>
+            <div class="form-group"  id="desc">
+                <label for="descricao">Descrição:</label>
+                <input type="text" name="descricao" id="descricao" class="form-control">
+        
+                <br><br>
+
+                <!-- <button type="submit" class="btn btn-sm btn-primary">Enviar</button> -->
+            </div>
   <br>
              <div class="col-md-2" name="cadastrar" id="cadastrar" style=" margin-left: 48%; margin-top: 1%" >
                   <button class="btn btn-success"> Cadastrar </button><br><br>
@@ -115,4 +147,44 @@
     }
 </script>
 <script type="text/javascript">
+</script>
+<script>
+    var i = 0;
+    function buttonClick() {
+        document.getElementById('button').value = ++i;
+    }
+</script>
+<script type="text/javascript">
+</script>
+
+<script>
+function myFunction2() {
+
+  var x = document.getElementById("video");
+  var y = document.getElementById("url");
+  var z = document.getElementById("desc");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    z.style.display = "block";
+    y.style.display = "none";
+   $('#url :input').attr('disabled', true);
+   $('#video :input').attr('disabled', false);
+  } 
+}
+</script>
+<script>
+function myFunction() {
+  var x = document.getElementById("url");
+  var y = document.getElementById("video");
+  var z = document.getElementById("desc");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    z.style.display = "block";
+    y.style.display = "none";
+    $('#video :input').attr('disabled', true);
+    $('#url :input').attr('disabled', false);
+  } 
+}
 </script>
