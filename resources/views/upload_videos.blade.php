@@ -83,7 +83,7 @@
             {{csrf_field()}}
             <div class="form-group" style="display: none" id="video">
                 <label for="arquivo">Arquivo:</label>
-                <input type="file" name="arquivo" id="arquivo" class="form-control">
+                <input type="file" name="arquivo" id="arquivo" class="form-control" >
             </div>
             <br>
             <div class="form-group" style="display: none" id="url">
@@ -97,7 +97,6 @@
                 <br><br>
             <button type="submit" class="btn btn-sm btn-primary">Enviar</button>
             </div>
-            
         </form>
     </div>
 </div>

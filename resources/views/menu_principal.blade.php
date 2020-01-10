@@ -21,7 +21,6 @@
                 <li><a href="http://elearning.goesnicoladelli.net/menu_inicial"><span class="mif-home mif-3x principais"></span>Início</a></li>
                 <li>
 
-
                     <label for="drop-cursos">
                         <span class="mif-books mif-3x principais"></span>
                         Cursos
@@ -30,6 +29,7 @@
                     </label>
                     <input type="checkbox" id="drop-cursos">
                     <ul>
+                         @if(Auth::user()->permis_painel_cob == '1' or Auth::user()->permissao_adm_geral == '1')
                         <li>
                             <label for="drop-cobranca">
                                 <span class="mif-chart-dots mif-2x"></span>
@@ -44,8 +44,13 @@
                                 <li><a href="#">Desbloquear</a></li>
                             </ul>
                         </li>
+                         @endif
+                <!--   FIM CURSO COB  -->
 
+                 <!--   INICIO CURSO JUR  -->
+                          @if(Auth::user()->permis_painel_jur == '1' or Auth::user()->permissao_adm_geral == '1')
                         <li>
+                            
                             <label for="drop-juridico">
                                 <span class="mif-justice mif-2x"></span>
                                 Jurídico
@@ -60,6 +65,11 @@
                                 <li><a href="#"> Desbloquear 4</a></li>
                             </ul>
                         </li>
+                        @endif
+
+<!--   FIM CURSO JUR  -->
+<!--   INICIO CURSO RH  -->
+@if(Auth::user()->permis_painel_rh == '1')
                         <li>
                             <label for="drop-rh">
                                 <span class="mif-organization mif-2x"></span>
@@ -75,7 +85,12 @@
                                 <li><a href="#">Desbloquear</a></li>
                             </ul>
                         </li>
+ @endif
+                        <!--   FIM CURSO RH  -->
+
+                        <!--   INICIO CURSO ADM  -->
                         <li>
+                             @if(Auth::user()->permis_painel_adm == '1')
                             <label for="drop-adm">
                                 <span class="mif-paste mif-2x"></span>
                                 Administração
@@ -89,8 +104,13 @@
                                 <li><a href="#">Vídeos</a></li>
                             </ul> 
                         </li>
+                        @endif
                     </ul>
                 </li>
+                 <!--   FIM CURSO ADM  -->
+                 
+
+                 <!--   INICIO CURSO RANKING  -->
                 <li>
                     <label for="drop-ranking">
                         <span class="mif-chart-bars mif-3x principais"></span>
@@ -117,7 +137,11 @@
                         <li><a href="#">Certificados (EM BREVE)</a></li>
                     </ul>
                 </li>
+
+             <!--   INICIO PAINEL CONFIG  -->
+              @if(Auth::user()->permis_painel_config == '1')
                  <li>
+                   
                     <label for="drop-jornada1">
                         <span class="mif-cog mif-3x principais"></span>Configurações
                         <span class="mif-chevron-right mif-2x direita"></span>
@@ -126,11 +150,15 @@
                     <input type="checkbox" id="drop-jornada1">
 
                     <ul>
+        @if(Auth::user()->permis_cadastra_perguntas == '1')
                         <li><a href="http://elearning.goesnicoladelli.net/rota_cadastrar_curso">Cadastrar Perguntas</a></li>
-                        <li><a href="#">Permissões</a></li>
-                    
+                        @endif
+                 @if(Auth::user()->permis_cadastra_permissao)
+                    <li><a href="cadastrar_permissoes">Permissões</a></li>
+                    @endif    
                     </ul>
                 </li>
+                @endif
             </ul>
         </nav>
           <script src="/Elearning_layout/js/main.js"></script>

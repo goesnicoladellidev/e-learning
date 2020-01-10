@@ -49,7 +49,11 @@ Route::get('/cadastra_pergunta/{setor}/{carteira}/{qtd_perg}', 'HomeController@c
 
 /*Route::get('/upload_videos', 'HomeController@rota_upload_videos')->name('rota_upload_videos');
 */
-Route::resource('/arquivo', "ArquivosController", ['names'=>['store'=>'upload']]);
+Route::resource('/arquivo', "ArquivosController", ['names'=>['update'=>'upload']]);
+
+
+Route::get('/anexar_videos', 'HomeController@anexar_videos')->name('cadastra_pergunta');
+
 
 // NAME VIEW DEVE RECEBER OUTRA, NAO PODE FICAR cadastro_perguntas
 /*Route::get('/cadastrar_perg/{setor}/{carteira}/{qtd_perg}','HomeController@cadastrar_perg')->name('cadastro_perguntas');*/
@@ -64,4 +68,9 @@ Route::get('/get_id_setor/{id_setor}', 'HomeController@get_id_setor')->name('rot
 Route::get('/rota_ranking/premiacoes', 'HomeController@rota_ranking')->name('rota_ranking');
 
 Route::get('/rota_ranking/receber_premio', 'HomeController@receber_premio')->name('rota_ranking');
+
+Route::get('/cadastrar_permissoes', 'HomeController@cadastrar_permissoes')->name('cadastrar_permissoes');
+
+
+
 //--------------------------------------------------------------------------

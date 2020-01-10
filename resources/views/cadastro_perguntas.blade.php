@@ -15,7 +15,9 @@
     <link rel="shortcut icon" href="/Elearning_layout/img/student_icon.jpg"  type="image/x-icon" >
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
+
 <body>
+
     <header id="top">
        <!--  <form action="" id="search" class="slide-fwd-left"> -->
             <div class="pesquisa">
@@ -23,11 +25,12 @@
                 <a href=""><span class="fa fa-user fa-lg"></span></a>
                 <a href=""><span class="fa fa-sign-out fa-lg"></span></a>
             </div>
-    </header>
-
-
-
-
+    </header>]
+<div style="margin-left: 38%"> 
+@if (Session::has('message'))
+   <div class="alert alert-info">{{ Session::get('message') }}</div>
+@endif
+</div>
 <div class="container-fluid">
         <div class="col-md-4">
          <form method="get" action="{{ url('/cadastra_pergunta', [$id_setor, $id_carteira, $qtd_perguntas]) }}">
@@ -45,8 +48,8 @@
             <br><br>
         <div>
     @endif
-            <div class="container-fluid" style="margin-left: 23%; margin-right: 20% ">
-
+            <div class="container-fluid" style="margin-left: 23%; margin-right: 20% "> 
+              
         <div class="form-group">
 
 

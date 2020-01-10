@@ -279,8 +279,7 @@ public function rota_ranking(){
 
         if($pontuacao_total > 399 ){
             $premios_concluidos = 0;
-        }
-        if($pontuacao_total >= 400 ){
+        }if($pontuacao_total >= 400 ){
             $premios_concluidos = 1;
 
         }if ($pontuacao_total >= 800){
@@ -326,7 +325,7 @@ public function rota_ranking(){
           $patente = "Lenda GN";
 
           break;
-          case ($xp_required >= 901 && $xp_required <= 1300):
+          case ($xp_required >= 901):
           $patente = "Lenda GN 2";
 
           break;
@@ -340,7 +339,9 @@ public function rota_ranking(){
   public function rota_treinamentos_iframe($id_setor, $id_carteira)
   { //recebe parametro id_carteira
     
+
     $user = auth::user();
+
 
     $controller_modulo = DB::table('modulo_cadastro as a')
       ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
@@ -350,7 +351,7 @@ public function rota_ranking(){
       ->where('id_carteira',$id_carteira)
       ->orderby('a.id_modulo', 'asc')
       ->get();
-    
+   //dd($controller_modulo);
     $controller_modulo2 = DB::table('modulo_cadastro as a')
       ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
@@ -362,10 +363,10 @@ public function rota_ranking(){
 
       //WHERE SETOR E CARTEIRA 
     $verifica_modulos_existentes = DB::table('respostas_questionario as a')
-    ->select('a.id_modulo_cadastrado as Modulos')
-    ->distinct('a.id_modulo')
-    ->get(); 
-
+     ->select('a.id_modulo_cadastrado as Modulos')
+     ->distinct('a.id_modulo')
+     ->get(); 
+    //dd($verifica_modulos_existentes);
     //VERIFICAR ESSA FUNÇÃO / NÃO ESTÁ FUNCIONANDO 100%
     foreach ($verifica_modulos_existentes as $key => $value) {
 
@@ -497,7 +498,6 @@ public function opcao_cadastros(Request $request){
     $qtd_perguntas = Request::input('qtd_perguntas');
     $num_modulo = Request::input('num_modulo');
 
-  
     $count_modulos = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
@@ -514,19 +514,13 @@ public function opcao_cadastros(Request $request){
    ->with('count_modulos',$count_modulos);
 }
 
-
-
 public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request){ 
-
 
         $user = auth::user();
         $id_setor = $setor;
         $id_carteira = $carteira;
         $quantidade_perguntas = $qtd_perg;
-
-        //salva arquivo porem nao possui dados, não esta recebendo request;
-        // $arquivo = Storage::disk('elearning')->put('teste.mp4', $request);
-
+        //dd($quantidade_perguntas);
         $id_modulo = Request::input('num_modulo');
         $num_questao = 0;
         $aula_descricao = "descrição do input";
@@ -538,19 +532,28 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
           ->select('id')
           ->max('id');
         
+        if (empty($id_modulo)) {
+          $id_modulo = $last_id_insert_modulo +1;
+        }
+
         $id_cadastro = $last_id_insert_modulo +1; //cria id +1
 
+        if (empty($id_cadastro )) {
+           $id_cadastro = 1;
+        }
         $exist_modulo = DB::table('modulo_cadastro')
          ->where('id_setor',$id_setor)
          ->where('id_carteira', $id_carteira)
          ->where('id_modulo', $id_modulo)
          ->first();
-        
+
+        // dd($exist_modulo);
+
         $numero_questao = DB::table('respostas_questionario_user')
          ->where('id', $user->id)
          ->get();
-        
-         //se quantidade de perguntas for igual quantidade de acertos, cria modulo visivivel se nao cria modulo invisivel.
+
+        //se quantidade de perguntas for igual quantidade de acertos, cria modulo visivivel se nao cria modulo invisivel.
 
         $cont_modulos = DB::table('modulo_cadastro as a')
           ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
@@ -569,11 +572,14 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
             ->where('b.qtd_acertos', 1)
             ->orderby('a.id_modulo', 'asc')
             ->count();
-          
+    
        //SE MODULO FOR NOVO ENTÃO VAI PARA A BLADE ANEXAR MATERIAIS VIDEO/FOTO/SLIDES, SE NÃO CADASTRA PERGUNTAS NORMALMENTE.
-       if (empty($exist_modulo)) {
-        
-          DB::table('modulo_cadastro')
+            //dd($exist_modulo);
+
+       if ($exist_modulo == null) {
+       // ESTÁ DANDO INSERT AQUI E NA MODEL. ARRUMAR!!!!!
+       
+         DB::table('modulo_cadastro')
             ->insert([
 
               'id' => $id_cadastro,
@@ -585,7 +591,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
             ]);
 
-          if ($modulo_concluidos == $cont_modulos){
+          if ($modulo_concluidos != $cont_modulos){
 
              DB::table('modulo_controller')
              ->insert([
@@ -593,6 +599,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
               'id_modulo_cadastrado' => $id_modulo,
               'modulo_visibilidade' => 'S',
               'modulo_concluido' => 'N'
+
             ]);
 
            }else{
@@ -604,6 +611,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
               'modulo_visibilidade' => 'N',
               'modulo_concluido' => 'N'
             ]);
+
            }
           }
 
@@ -626,7 +634,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         if ($verifica_qtd_questoes <= 0 || empty($verifica_qtd_questoes)) { 
 
           $num_questao = 1;
-           
+
         }else{
 
              $num_questao = $verifica_qtd_questoes;
@@ -650,14 +658,11 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        }if ($resposta_correta == "d") {
            $valor_resp_1 = "n";  $valor_resp_2 = "nn";  $valor_resp_3 = "nnn";  $valor_resp_4 = "s";          
        }
-     
+   ///////okk
       
       //BUSCAR O ULTIMO NUMERO DO MODULO ABERTO, INSERIR O PROXIMO VALOR;
 
        DB::table('respostas_questionario')
-       ->where('id_setor', $id_setor)
-       ->where('id_carteira', $id_carteira)
-       ->where('id_modulo_cadastrado', $id_modulo)
        ->insert([
 
         'id_setor' => $id_setor,
@@ -685,9 +690,8 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        ->where('id_setor', 1)
        ->orderby('nome_carteira', 'asc')
        ->get();
-
    }
-
+   
     if (empty($exist_modulo)) {  
       
       return view('upload_videos')
@@ -695,9 +699,11 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
      ->with('id_carteira', $id_carteira)
      ->with('id_modulo', $id_modulo);
     }
+ $msg = "Cadastro Realizado com Sucesso!";
 
      //return view('cadastrar_curso')
-     return view('upload_videos')
+     return redirect('/menu_inicial')
+     ->with('mensagem',$msg)
      ->with('id_setor', $id_setor)
      ->with('cursos_setor', $cursos_setor)
      ->with('id_carteira', $id_carteira)
@@ -707,4 +713,35 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
   //obs : armazenamento dos arquivos estão no controller ArquivosController;
 
+  public function cadastrar_permissoes(){
+      
+      $user = Auth::user();
+
+      //escolher usuario;
+      $tab_usuarios = DB::table('users')
+      ->get();
+
+       return view('cadastrar_permissoes')
+    ->with('tab_usuarios', $tab_usuarios);
+
+  }
+
+  public function tab_user_permissoes(){
+
+      $user = Auth::user();
+      
+      //fazer join com tabela de permissoes dos usuarios;
+      $tab_usuarios = DB::table('users')
+      ->get();
+
+
+    return view('cadastrar_permissoes')
+    ->with('tab_usuarios', $tab_usuarios);
+
+  }
+
+  public function anexar_videos(){
+
+      
+  }
 }
