@@ -69,7 +69,7 @@
         @endif
           <li class="list-group-item">
             <input type="radio" name="vd_checked_{{$controller_modulo->Modulo_num}}" value="vd_checked_{{$controller_modulo->Modulo_num}}">
-<a href="{{ url('/questionario_elearning', [$controller_modulo->id_setor,$controller_modulo->id_carteira, $controller_modulo->Id]) }}
+<a href="{{ url('/questionario_elearning', [$controller_modulo->id_setor,$controller_modulo->id_carteira, $controller_modulo->Modulo_num]) }}
 " > QUESTIONÁRIO </a>
           </li>
       </ul>

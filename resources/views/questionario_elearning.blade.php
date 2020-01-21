@@ -39,7 +39,7 @@
     </div>
     @endif
     </div>
-    <form method="get" action="{{ url('/result_resposta', $id) }}">
+    <form method="get" action="{{ url('/result_resposta', [$id_setor, $id_carteira, $id_modulo]) }}">
      {!! csrf_field() !!}
     <div class="container-fluid" style="margin-left: 23%; margin-right: 20% ">
         <div class="form-group">
@@ -56,18 +56,19 @@
                         @foreach($resp_questionario as $key=>$resp_questionario)
                         <tr>
                          <td style="text-align: left;" colspan="2">
-                                <strong>  {{$resp_questionario->num_questao}})  {{$resp_questionario->titulo_pergunta}} : </strong>
+                                <strong>  {{$resp_questionario->Num_questao}})  {{$resp_questionario->Titulo_pergunta}} : </strong>
+                                
                             </td>
                         </tr>
                         <tr>
-                          <td style="text-align: left;"> {{$resp_questionario->num_questao}}) {{$resp_questionario->questao}}</td>
+                          <td style="text-align: left;"> {{$resp_questionario->Num_questao}}) {{$resp_questionario->Questao}}</td>
                             <td>
-                                <select class="form-control select_1" name="questao_{{$resp_questionario->num_questao}}" id="questao_{{$resp_questionario->num_questao}}" required="required">       
+                                <select class="form-control select_1" name="questao_{{$resp_questionario->Num_questao}}" id="questao_{{$resp_questionario->Num_questao}}" required="required">       
                                     <option value="" disabled="disabled">Selecione</option>
-                                    <option value="{{$resp_questionario->valor_resp_1}}">{{$resp_questionario->resposta_1}}</option>
-                                    <option value="{{$resp_questionario->valor_resp_2}}">{{$resp_questionario->resposta_2}}</option>        
-                                    <option value="{{$resp_questionario->valor_resp_3}}">{{$resp_questionario->resposta_3}}</option>        
-                                    <option value="{{$resp_questionario->valor_resp_4}}">{{$resp_questionario->resposta_4}}</option>   
+                                    <option value="{{$resp_questionario->Valor_resp_1}}">{{$resp_questionario->Resposta_1}}</option>
+                                    <option value="{{$resp_questionario->Valor_resp_2}}">{{$resp_questionario->Resposta_2}}</option>        
+                                    <option value="{{$resp_questionario->Valor_resp_3}}">{{$resp_questionario->Resposta_3}}</option>        
+                                    <option value="{{$resp_questionario->Valor_resp_4}}">{{$resp_questionario->Resposta_4}}</option>   
                                 </select>
                             </td>
                         </tr>

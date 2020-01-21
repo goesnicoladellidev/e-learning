@@ -246,9 +246,10 @@ public function receber_premio(){
     }
 
     //COMO SERÁ COMUNICAÇÃO DE CONTROLE ENTRE GESTOR X COLABORADOR??.
-
+    
    return back();
 }
+
 
 public function rota_ranking(){
 
@@ -336,23 +337,24 @@ public function rota_ranking(){
   }
 
   public function rota_treinamentos_iframe($id_setor, $id_carteira)
-  { //recebe parametro id_carteira
+  { 
+  //recebe parametro id_carteira
     
 
     $user = auth::user();
 
-
     $controller_modulo = DB::table('modulo_cadastro as a')
-      ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+      ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link')
       ->where('b.id_user', '=', $user->id)
       ->where('id_setor',$id_setor)
       ->where('id_carteira',$id_carteira)
       ->orderby('a.id_modulo', 'asc')
       ->get();
-   //dd($controller_modulo);
+
+
     $controller_modulo2 = DB::table('modulo_cadastro as a')
-      ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+      ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
       ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
       ->where('b.id_user', '=', $user->id)
       ->where('id_setor',$id_setor)
@@ -360,13 +362,14 @@ public function rota_ranking(){
       ->orderby('a.id_modulo', 'asc')
       ->get();
 
+      //dd($controller_modulo,$controller_modulo2);
       //WHERE SETOR E CARTEIRA 
     $verifica_modulos_existentes = DB::table('respostas_questionario as a')
      ->select('a.id_modulo_cadastrado as Modulos')
      ->distinct('a.id_modulo')
      ->get(); 
-    //dd($verifica_modulos_existentes);
-    //VERIFICAR ESSA FUNÇÃO / NÃO ESTÁ FUNCIONANDO 100%
+
+
     foreach ($verifica_modulos_existentes as $key => $value) {
 
         $modulo[] =  array('index' => $value->Modulos );
@@ -385,6 +388,7 @@ public function rota_ranking(){
              $modulos_concluidos = DB::table('modulo_cadastro as a')
               ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
               ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+
               ->where('b.id_user', '=', $user->id)
               ->where('id_setor',$id_setor)
               ->where('id_carteira', $id_carteira)
@@ -398,40 +402,67 @@ public function rota_ranking(){
                ->with('id_carteira', $id_carteira);
           }
 
-  public function rota_resp_questionario($id_setor, $id_carteira, $id){ 
+  public function rota_resp_questionario($id_setor, $id_carteira, $id_modulo){ 
   
            $input = Request::all();
-           $resp_questionario = DB::table("respostas_questionario")
-            ->where('id_modulo_cadastrado', $id)
-            ->get();
+          
+          // $resp_questionario = DB::table("respostas_questionario")
+           // ->where('id_modulo_cadastrado', $id_modulo)
+            //->get();
+
+            $resp_questionario = DB::table('modulo_cadastro as a')
+              ->join('respostas_questionario as b', 'a.id', '=', 'b.id_modulo_cadastrado')
+              ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.id_modulo_cadastrado as Modulo_cadastro','b.titulo_pergunta as Titulo_pergunta','b.num_questao as Num_questao','b.questao as Questao', 'b.resposta_1 as Resposta_1','b.resposta_2 as Resposta_2','b.resposta_3 as Resposta_3','b.resposta_4 as Resposta_4','b.valor_resp_1 as Valor_resp_1','b.valor_resp_2 as Valor_resp_2','b.valor_resp_3 as Valor_resp_3','b.valor_resp_4 as Valor_resp_4')
+              ->where('a.id_setor',$id_setor)
+              ->where('a.id_carteira', $id_carteira)
+               ->where('a.id_modulo', $id_modulo)
+              ->get();
 
            return view('questionario_elearning')
             ->with('resp_questionario', $resp_questionario)
-            ->with('id',$id);
+            ->with('id_setor', $id_setor)
+            ->with('id_carteira', $id_carteira)
+            ->with('id_modulo', $id_modulo);
        }
 
-public function result_respostas($id){
+public function result_respostas($id_setor, $id_carteira, $id_modulo){
   
     $input = Request::all();
 
-    $qtd_questoes = DB::table('respostas_questionario')
-            ->where('id_modulo_cadastrado', $id)
-            ->count('id_modulo_cadastrado');
+
+    $modulos = DB::table('modulo_cadastro as a')
+              ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
+              ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+              ->where('a.id_setor',$id_setor)
+              ->where('a.id_carteira', $id_carteira)
+               ->where('a.id_modulo', $id_modulo)
+              ->get();
+
+
+    $qtd_questoes = DB::table('modulo_cadastro as a')
+              ->join('respostas_questionario as b', 'a.id', '=', 'b.id_modulo_cadastrado')
+              ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+              ->where('a.id_setor',$id_setor)
+              ->where('a.id_carteira', $id_carteira)
+               ->where('a.id_modulo', $id_modulo)
+              ->count();
+
 
     $questionario = DB::table('respostas_questionario')
-     ->where('id_modulo_cadastrado', $id)
+     ->where('id_modulo_cadastrado', $id_modulo)
      ->get();
 
+   
     $media_requisito = 5;
     $valor_nota = (10 / $qtd_questoes);
     $resp_correta = 0;
     $media_final = 0;
     $cont_resp = 0;
-
+    //dd($input['questao_2']);
     for ($i=1; $i <= $qtd_questoes ; $i++) { 
               
             if ($input['questao_'.$i] == 's' ) {
-
+             // var_dump($input['questao_'.$i]);
               $resp_correta = $valor_nota;
               $cont_resp = $cont_resp + 1;
               $media_final = $media_final + $valor_nota;
@@ -441,33 +472,43 @@ public function result_respostas($id){
               $resp_correta = 0;
               $cont_resp = $cont_resp + 0;
               $media_final = $media_final + $resp_correta; 
-
           }
         }
 
+    //dd($qtd_questoes);
+    //dd($id_setor,$id_carteira,$id_modulo);
+
       if ($media_final >= $media_requisito) {
 
-         DB::table('modulo_controller')
-         ->where('id_modulo_cadastrado', $id) 
-
-             ->update([
+         DB::table('modulo_controller as a')
+         ->join('modulo_cadastro as b', 'b.id', '=', 'a.id_modulo_cadastrado')
+         ->where('b.id_setor',$id_setor)
+         ->where('b.id_carteira', $id_carteira)
+         ->where('b.id_modulo', $id_modulo)
+        // ->where('id_modulo_cadastrado', $id_modulo)
+         ->update([
                'modulo_concluido'  => 'S',
                'modulo_visibilidade'  => 'S',
                'media_questao_user' => $media_final,
                'qtd_acertos'  => $cont_resp
            ]);
 
-             $id += 1;
-
-             DB::table('modulo_controller')->where('id_modulo_cadastrado', $id)
+ 
+           //$id += 1;
+           /*  DB::table('modulo_controller')->where('id_modulo_cadastrado', $id)
              ->update([
                'modulo_visibilidade'  => 'S'
-           ]);
+           ]);*/
+
          }else{
 
-          DB::table('modulo_controller')
-          ->where('id_modulo_cadastrado', $id)
-          ->update([
+                    //NAO ESTA CAINDO NO ELSE;
+         DB::table('modulo_controller as a')
+         ->join('modulo_cadastro as b', 'b.id', '=', 'a.id_modulo_cadastrado')
+           ->where('b.id_setor',$id_setor)
+           ->where('b.id_carteira', $id_carteira)
+           ->where('b.id_modulo', $id_modulo)
+           ->update([
            'media_questao_user' => $media_final,
            'qtd_acertos'  => $cont_resp
 
@@ -503,12 +544,11 @@ public function opcao_cadastros(Request $request){
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
         ->count();
-    //dd($count_modulos );
+
     $base_setores = DB::table('setor_tab') 
      ->get();   
 
    return view('cadastro_perguntas')
-  // ->with('num_questao', $verifica_qtd_questoes)
    ->with('id_setor', $id_setor)
    ->with('id_carteira', $id_carteira)
    ->with('qtd_perguntas',$qtd_perguntas)
@@ -521,18 +561,15 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $id_setor = $setor;
         $id_carteira = $carteira;
         $quantidade_perguntas = $qtd_perg;
-        //dd($quantidade_perguntas);
         $id_modulo = Request::input('num_modulo');
         $link_aula = Request::input('url');
         $aula_descricao = Request::input('descricao');
-        //dd($url,$descri);
-
         $num_questao = 0;
         //$aula_descricao = "descrição do input";
         $arquivo_nome = "nomeArquivo";
         $extensao_arquivo = "mp4"; 
-        //$link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
 
+        //$link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
        
         //dd($id_modulo_cadastrado);
        /* if (empty($id_modulo_cadastrado) || $id_modulo_cadastrado == null) {
@@ -546,9 +583,8 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
            $id_cadastro = 1;
         }
 
-         //cria id +1
        
-        $exist_modulo = DB::table('modulo_cadastro')
+        $exist_modulo   = DB::table('modulo_cadastro')
          ->where('id_setor',$id_setor)
          ->where('id_carteira', $id_carteira)
          ->where('id_modulo', $id_modulo)
@@ -562,11 +598,17 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
       
           
           var_dump("arrumar aq");
-          $cont_modulos = DB::table('modulo_cadastro')
-          ->where('id_setor',$id_setor)
-          ->where('id_carteira', $id_carteira)
-          ->where('id_modulo', $id_modulo)
-          ->count();  
+        $cont_modulos_cad = DB::table('modulo_cadastro as a')
+            ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+            ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+            //->where('b.id_user', '=', $user->id)
+            ->where('a.id_setor',$id_setor)
+            ->where('a.id_carteira', $id_carteira)
+            ->where('a.id_modulo', $id_modulo)
+            //->where('b.qtd_acertos', 1)
+            //->orderby('a.id_modulo', 'asc')
+            ->count();
+
          
          //dd($cont_modulos);
 
@@ -580,16 +622,13 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
             ->orderby('a.id_modulo', 'asc')
             ->count();
     
-       //SE MODULO FOR NOVO ENTÃO VAI PARA A BLADE ANEXAR MATERIAIS VIDEO/FOTO/SLIDES, SE NÃO CADASTRA PERGUNTAS NORMALMENTE.
-            //dd($exist_modulo);
+  
 
-       if ($exist_modulo == null) {
-       // ESTÁ DANDO INSERT AQUI E NA MODEL. ARRUMAR!!!!!
+       if ($exist_modulo == '') {
 
          DB::table('modulo_cadastro')
             ->insert([
 
-              //'id' => $id_cadastro,
               'id_setor' => $id_setor,
               'id_carteira' => $id_carteira,
               'id_modulo' => $id_modulo,
@@ -597,20 +636,9 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
               'link_aula' => $link_aula
 
             ]);
-           
           }
 
-        // ****************** ARRUMAR AQUI INSERT ID_MODULO_CADASTRADO **************************
-
-          // COLOCAR ESSE ID_MODULO EM ID_MODULO_CADASTRADO
-       /*    $id_modulo_resp = DB::table('modulo_cadastro as a')
-          ->join('respostas_questionario as b','a.id','=','b.id_modulo_cadastrado')
-          ->select('a.id as Id', 'b.id_setor as Id_setor', 'b.id_carteira as Id_carteira')
-          ->where('b.id_setor', $id_setor) 
-          ->where('b.id_carteira', $id_carteira)
-          ->first();*/
-        //dd($id_modulo_resp);
-          //$id_modulo = $id_modulo_resp->Id;
+    
 
            $last_id_insert_modulo = DB::table('modulo_cadastro')
           ->select('id')
@@ -619,45 +647,41 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
           ->where('id_modulo',$id_modulo) 
           ->max('id');
 
-          $id_cadastro = $last_id_insert_modulo +1;
+         // 
 
+         
           $id_modulo_cadastrado = $last_id_insert_modulo;
-
           if ($id_modulo_cadastrado == 0) {
              $id_modulo_cadastrado = 1;
           }
 
-          // ************************************************************
 
-           //dd($cont_modulos,$exist_modulo);
-          // QUANDO MODULO É NOVO, NÃO ENTRA AQUI!!!;
+          // ************************************************************ 
 
-          if ($cont_modulos == 0 && $exist_modulo == null){
+          //QUANDO JÁ POSSUI MODULO  NAO PODE CADASTRAR NOVO MODULO_CONTROLLER!
+          //SE MODULO EXISTENTE FOR VISIBILIDADE = S ENTAO  VISIB = N; ELSE VISIB = S;
 
-           //dd('entrou aqui');
+         
+          $modulo_visivel = DB::table('modulo_cadastro as a')
+            ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+            ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+            ->where('id_setor',$id_setor)
+            ->where('id_carteira', $id_carteira)
+            ->orderby('a.id_modulo', 'asc')
+            ->first();
+
+            if ($cont_modulos_cad == 0 && $exist_modulo == ''){
+
+             $id_cadastro = $last_id_insert_modulo +1;
              DB::table('modulo_controller')
              ->insert([
-
               'id_user' => $user->id,
               'id_modulo_cadastrado' => $id_modulo_cadastrado,
               'modulo_visibilidade' => 'S',
               'modulo_concluido' => 'N'
-
-            ]);
-
-           }elseif ($cont_modulos > 0 && $exist_modulo != null){
-          
-             //$id_modulo_cadastrado += 1;
-
-             DB::table('modulo_controller')
-             ->insert([
-              'id_user' => $user->id,
-              'id_modulo_cadastrado' => $id_modulo_cadastrado,
-              'modulo_visibilidade' => 'N',
-              'modulo_concluido' => 'N'
             ]);
            }
-
+        
        $count_modulos_cad2 = DB::table('modulo_cadastro')
         ->where('id_setor', $id_setor)
         ->where('id_carteira', $id_carteira)
@@ -665,7 +689,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         ->max('id_modulo');
 
        //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
-
+ 
        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
          $verifica_qtd_questoes = DB::table('respostas_questionario')
@@ -680,7 +704,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
              $num_questao = $verifica_qtd_questoes;
              $num_questao += 1;
-
+             var_dump('correção: id_modulo_cadastrado está vindo 2 e não valor 1 como deve ser!!!!!');
         }
         
          $perguntas_quiz = Request::input('pergunta_quiz_'.$i);
@@ -690,6 +714,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
          $respostas_quiz_2 = Request::input('respostas_quiz_b_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
          $respostas_quiz_3 = Request::input('respostas_quiz_c_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
          $respostas_quiz_4 = Request::input('respostas_quiz_d_'.$i); //FAZER CAMPOS RESPOSTAS, REQUIRED!!!
+
         if ($resposta_correta == "a"){
            $valor_resp_1 = "s";  $valor_resp_2 = "n";  $valor_resp_3 = "nn";  $valor_resp_4 = "nnn";            
        }if ($resposta_correta == "b") {
@@ -699,10 +724,8 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        }if ($resposta_correta == "d") {
            $valor_resp_1 = "n";  $valor_resp_2 = "nn";  $valor_resp_3 = "nnn";  $valor_resp_4 = "s";          
        }
-   ///////okk
-      
-      //BUSCAR O ULTIMO NUMERO DO MODULO ABERTO, INSERIR O PROXIMO VALOR;
 
+    
        DB::table('respostas_questionario')
        ->insert([
 
@@ -720,7 +743,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         'valor_resp_2' => $valor_resp_2,
         'valor_resp_3' => $valor_resp_3,
         'valor_resp_4' => $valor_resp_4
-
+      
       ]);
 
        $cursos_setor = DB::table('setor_tab')
@@ -732,20 +755,19 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        ->orderby('nome_carteira', 'asc')
        ->get();
    }
-    //rota upload video
+
     if (empty($exist_modulo) || $exist_modulo == null) {  
-      
-      //return view('upload_videos')
+
        return redirect('/menu_inicial')
      ->with('id_setor', $id_setor)
      ->with('id_carteira', $id_carteira)
      ->with('id_modulo', $id_modulo);
     }
- $msg = "Cadastro Realizado com Sucesso!";
+     
+     $msg = "Cadastro Realizado com Sucesso!";
 
-     //return view('cadastrar_curso')
+
      return redirect('/menu_inicial')
-    // return redirect('anexar_videos')
      ->with('mensagem',$msg)
      ->with('id_setor', $id_setor)
      ->with('cursos_setor', $cursos_setor)
@@ -754,7 +776,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
   }
 
-  
   //obs : armazenamento dos arquivos estão no controller ArquivosController;
 
   public function cadastrar_permissoes(){

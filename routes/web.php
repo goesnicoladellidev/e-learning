@@ -38,7 +38,7 @@ Route::get('/questionario_elearning/{id_setor}/{id_carteira}/{id}', 'HomeControl
 
 /**------------------ RESSULTADO DO QUIZ -----------------------------*/
 
-Route::get('/result_resposta/{id}', 'HomeController@result_respostas')->name('result_respostas');
+Route::get('/result_resposta/{id_setor}/{id_carteira}/{id_modulo}', 'HomeController@result_respostas')->name('result_respostas');
 
 //--------------------------------------------------------
 //cadastrar perguntas
