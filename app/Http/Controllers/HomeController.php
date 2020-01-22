@@ -351,7 +351,7 @@ public function rota_ranking(){
       ->where('id_carteira',$id_carteira)
       ->orderby('a.id_modulo', 'asc')
       ->get();
-
+//dd($controller_modulo);
 
     $controller_modulo2 = DB::table('modulo_cadastro as a')
       ->join('modulo_controller as b', 'a.id', '=', 'b.id_modulo_cadastrado')
@@ -461,7 +461,8 @@ public function result_respostas($id_setor, $id_carteira, $id_modulo){
     //dd($input['questao_2']);
     for ($i=1; $i <= $qtd_questoes ; $i++) { 
               
-            if ($input['questao_'.$i] == 's' ) {
+
+          if ($input['questao_'.$i] == 's' ) {
              // var_dump($input['questao_'.$i]);
               $resp_correta = $valor_nota;
               $cont_resp = $cont_resp + 1;
@@ -485,20 +486,12 @@ public function result_respostas($id_setor, $id_carteira, $id_modulo){
          ->where('b.id_setor',$id_setor)
          ->where('b.id_carteira', $id_carteira)
          ->where('b.id_modulo', $id_modulo)
-        // ->where('id_modulo_cadastrado', $id_modulo)
          ->update([
                'modulo_concluido'  => 'S',
                'modulo_visibilidade'  => 'S',
                'media_questao_user' => $media_final,
                'qtd_acertos'  => $cont_resp
            ]);
-
- 
-           //$id += 1;
-           /*  DB::table('modulo_controller')->where('id_modulo_cadastrado', $id)
-             ->update([
-               'modulo_visibilidade'  => 'S'
-           ]);*/
 
          }else{
 
@@ -524,7 +517,6 @@ public function result_respostas($id_setor, $id_carteira, $id_modulo){
       }
 
       return Redirect('menu_inicial');
-
 }
 
   public function cadastro_cursos(){
@@ -562,12 +554,28 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         $id_carteira = $carteira;
         $quantidade_perguntas = $qtd_perg;
         $id_modulo = Request::input('num_modulo');
-        $link_aula = Request::input('url');
+        $url = Request::input('url');
         $aula_descricao = Request::input('descricao');
         $num_questao = 0;
         //$aula_descricao = "descrição do input";
         $arquivo_nome = "nomeArquivo";
         $extensao_arquivo = "mp4"; 
+
+        $link_aula ="";
+       /*$url_teste = '<iframe width="560" height="315" src="https://www.youtube.com/embed/DHfYI7o3_PU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';*/
+      if ($url != null) {
+
+       $remove = '<iframe width="560" height="315" src="' ;
+       
+       $remove2 = '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+
+       $subject = 'REGISTER 11223344 here' ;
+       $search = '1223344' ;
+       $url_par1 = str_replace($remove, '', $url) ;
+       $link_aula = str_replace($remove2, '', $url_par1) ;
+
+       }
+       //dd($url);
 
         //$link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
        

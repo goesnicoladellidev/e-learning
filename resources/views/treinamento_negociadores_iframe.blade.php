@@ -18,15 +18,21 @@
              <!--      ESSA FUNÇÃO troca frame       -->
              <!--    PRECISA ESCONDER ESSA DIV ON CLICK;     -->
        @foreach($controller_modulo as $key=>$controller_modulo)
+        
+
          <div class="resume" id="ivideo{{$controller_modulo->Modulo_num}}">
-                 <video  width="720" height="600" name="gestao_judicial{{$controller_modulo->Modulo_num}}"  id="gestao_judicial{{$controller_modulo->Modulo_num}}" controls="" onclick="vid_listen_std_rcb('gestao_judicial','vd_checked_{{$controller_modulo->Modulo_num}}')" style="margin-left: 25%">
+
+                <iframe width="920" height="600" name="iframe{{$controller_modulo->Modulo_num}}" id="iframe{{$controller_modulo->Modulo_num}} height="315" src="{{$controller_modulo->Aula_link}}" style=" margin-left: 25%; margin-top: 2%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+                <!--  <video  width="720" height="600" name="gestao_judicial{{$controller_modulo->Modulo_num}}"  id="gestao_judicial{{$controller_modulo->Modulo_num}}" controls="" onclick="vid_listen_std_rcb('gestao_judicial','vd_checked_{{$controller_modulo->Modulo_num}}')" style="margin-left: 25%">
                  <source src="{{$controller_modulo->Aula_link}}" type="video/mp4">
                   Seu navegador não tem suporte para o formato mp4, escolha uma outra opção para navegar em nossa plataforma de ensino.
-                </video>
+                </video> -->
          </div>
 
-         <div class="resume" id="iframe{{$controller_modulo->Modulo_num}}">
-          <iframe name="iframe{{$controller_modulo->Modulo_num}}" width="750" height="750" src="/Elearning_layout/modulo_certo/story_html5.html" id="iframe{{$controller_modulo->Modulo_num}}"  style=" margin-left: 25%; margin-top: 2%" frameborder="0" allowfullscreen></iframe>
+        <!--  <div class="resume" id="iframe{{$controller_modulo->Modulo_num}}">
+          <iframe name="iframe{{$controller_modulo->Modulo_num}}" width="750" height="750" src="/Elearning_layout/modulo_certo/story_html5.html" id="iframe{{$controller_modulo->Modulo_num}}"  style=" margin-left: 25%; margin-top: 2%" frameborder="0" allowfullscreen></iframe> -->
          </div>
      @endforeach
         <div class="tbl-ranking">
