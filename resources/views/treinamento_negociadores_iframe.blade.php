@@ -14,26 +14,25 @@
         </form>
     </header>
 <section>
- 
+
              <!--      ESSA FUNÇÃO troca frame       -->
              <!--    PRECISA ESCONDER ESSA DIV ON CLICK;     -->
        @foreach($controller_modulo as $key=>$controller_modulo)
-        
 
          <div class="resume" id="ivideo{{$controller_modulo->Modulo_num}}">
 
-                <iframe width="920" height="600" name="iframe{{$controller_modulo->Modulo_num}}" id="iframe{{$controller_modulo->Modulo_num}} height="315" src="{{$controller_modulo->Aula_link}}" style=" margin-left: 25%; margin-top: 2%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
+                <iframe width="920" height="600" name="iframe{{$controller_modulo->Modulo_num}}" id="iframe{{$controller_modulo->Modulo_num}} height="315" src="{{$controller_modulo->Aula_link}}" style=" margin-left: 25%; margin-top: 2%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"  allowfullscreen></iframe>
                 <!--  <video  width="720" height="600" name="gestao_judicial{{$controller_modulo->Modulo_num}}"  id="gestao_judicial{{$controller_modulo->Modulo_num}}" controls="" onclick="vid_listen_std_rcb('gestao_judicial','vd_checked_{{$controller_modulo->Modulo_num}}')" style="margin-left: 25%">
                  <source src="{{$controller_modulo->Aula_link}}" type="video/mp4">
                   Seu navegador não tem suporte para o formato mp4, escolha uma outra opção para navegar em nossa plataforma de ensino.
                 </video> -->
+
          </div>
 
         <!--  <div class="resume" id="iframe{{$controller_modulo->Modulo_num}}">
           <iframe name="iframe{{$controller_modulo->Modulo_num}}" width="750" height="750" src="/Elearning_layout/modulo_certo/story_html5.html" id="iframe{{$controller_modulo->Modulo_num}}"  style=" margin-left: 25%; margin-top: 2%" frameborder="0" allowfullscreen></iframe> -->
          </div>
+
      @endforeach
         <div class="tbl-ranking">
            <div class="panel-group" style="margin-top: 200%" >
@@ -41,7 +40,6 @@
     <h4 class="panel-title" style="margin-left: 1%">
         <a data-toggle="collapse" > Módulos - Treinamento Santander</a>
     </h4>
-    
  
   @foreach($controller_modulo2 as $key=>$controller_modulo)
   @if($controller_modulo->Modulo_visibilidade == "S")
@@ -56,10 +54,10 @@
       </h4>
     </div>
     @elseif($controller_modulo->Modulo_concluido == "S")
-
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" href="#collapse{{$controller_modulo->Modulo_num}}"><font color="green">Módulo {{$controller_modulo->Modulo_num}} (CONCLUÍDO)</font> / <font color="green">Nota: {{$controller_modulo->Media_questao_user}}</font></a>
+        <a data-toggle="collapse" href="#collapse{{$controller_modulo->Modulo_num}}"><font color="green">Módulo {{$controller_modulo->Modulo_num}} (CONCLUÍDO)</font> / <font color="green">Nota: {{$controller_modulo->Media_questao_user}}</font>
+        </a>
       </h4>
     </div>
     @endif
@@ -76,7 +74,8 @@
           <li class="list-group-item">
             <input type="radio" name="vd_checked_{{$controller_modulo->Modulo_num}}" value="vd_checked_{{$controller_modulo->Modulo_num}}">
 <a href="{{ url('/questionario_elearning', [$controller_modulo->id_setor,$controller_modulo->id_carteira, $controller_modulo->Modulo_num]) }}
-" > QUESTIONÁRIO </a>
+" > QUESTIONÁRIO 
+</a>
           </li>
       </ul>
     </div>
@@ -151,6 +150,17 @@ $('.resume') .hide()
     });
 }
 
+var stopVideos = function () {
+  var videos = document.querySelectorAll('iframe, video');
+  Array.prototype.forEach.call(videos, function (video) {
+    if (video.tagName.toLowerCase() === 'ivideo') {
+      video.pause();
+    } else {
+      var src = video.src;
+      video.src = src;
+    }
+  });
+};
 
 function vid_start() {
     window.timeTracking = {

@@ -45,8 +45,7 @@
                             </ul>
                         </li>
                          @endif
-                <!--   FIM CURSO COB  -->
-
+                 <!--   FIM CURSO COB  -->
                  <!--   INICIO CURSO JUR  -->
                           @if(Auth::user()->permis_painel_jur == '1' or Auth::user()->permissao_adm_geral == '1')
                         <li>
@@ -154,7 +153,7 @@
                         <li><a href="http://elearning.goesnicoladelli.net/rota_cadastrar_curso">Cadastrar Perguntas</a></li>
                         @endif
                  @if(Auth::user()->permis_cadastra_permissao)
-                    <li><a href="cadastrar_permissoes">Permissões</a></li>
+                    <li><a href="opcoes_permissoes">Permissões</a></li>
                     @endif    
                     </ul>
                 </li>

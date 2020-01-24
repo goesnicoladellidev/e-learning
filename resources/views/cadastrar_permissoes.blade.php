@@ -30,30 +30,27 @@
 
 <div class="container-fluid">
         <div class="col-md-4">
-         <form method="get" action="{{ url('/opcao_cadastros') }}">
+         <form method="get" action="{{ url('/tab_user_permissoes') }}">
          <h1 class="pull-left" style="margin-left: 44%"> Cadastrar Permissões Usuários </h1>
          <br><br><br><br>
 
-         <label class="pull-left" style="margin-left: 25%" >Escolha Usuário .</label>
-                <select class="form-control" name="setor_curso" id="setor_curso" required="" >
-                    <option value=""> Escolha Usuário</option>
-                    @foreach($tab_usuarios as $curso_s)
-                    <option value="{{$curso_s->id}}"> {{$curso_s->name}}</option>
+         <label class="pull-left" style="margin-left: 25%" >Escolha Usuário :</label>
+                <select class="form-control" name="user_select" id="user_select" required="" >
+                    <option value=""> Escolha Usuário </option>
+                    @foreach($tab_usuarios as $user)
+                    <option value="{{$user->id}}"> {{$user->name}}</option>
                     @endforeach
                 </select>
             <br><br><br><br>
         <div>
-
            
 <!--                           INICIO  CARTEIRA COB 1                  -->
         <label class="pull-left" for="carteira_cob1" style="margin-left: 25%; display: none; "name="carteira_cob1" id="carteira_cob1" >Tabela Permissoes.</label>
-                <select class="form-control" name="carteira_cob1" id="carteira_cob1" required="" >
+                <select class="form-control" name="carteira_cob1" id="carteira_cob1"  >
                     <option value="" >Tabela Permissoes</option>
                 </select>
               <br><br>
-
 <!--                            FIM  CARTEIRA COB 1                  -->
-
          </div>
              <div class="col-md-2" name="avancar" id="avancar" style=" margin-left: 46%; margin-top: 2%" >
                     <button class="btn btn-success"> Avançar </button>

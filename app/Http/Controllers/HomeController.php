@@ -20,11 +20,8 @@ use Redirect;
 use Illuminate\Support\Facades\Input;
 
 
-
-
 class HomeController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -45,8 +42,6 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-
 
     public function rota_santander(){
         return view('treinamento_santander');
@@ -575,14 +570,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        $link_aula = str_replace($remove2, '', $url_par1) ;
 
        }
-       //dd($url);
-
-        //$link_aula = "/Elearning_layout/treinamentos/".$arquivo_nome.".".$extensao_arquivo;
-       
-        //dd($id_modulo_cadastrado);
-       /* if (empty($id_modulo_cadastrado) || $id_modulo_cadastrado == null) {
-          $id_modulo_cadastrado = 1;
-        }*/
 
         if (empty($id_modulo) || $id_modulo == null) {
           $id_modulo = 1;
@@ -604,7 +591,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
          ->get();
 
       
-          
           var_dump("arrumar aq");
         $cont_modulos_cad = DB::table('modulo_cadastro as a')
             ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
@@ -647,7 +633,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
           }
 
     
-
            $last_id_insert_modulo = DB::table('modulo_cadastro')
           ->select('id')
           ->where('id_setor', $id_setor)
@@ -697,7 +682,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
         ->max('id_modulo');
 
        //SE TODOS OS ANTIGOS MODULOS FOREM CONCLUIDOS ENTÃO DEIXAR O MODULO CADASTRADO VISIVEL. SE NÃO DEIXAR INVISIVEL PARA QUE USUARIO DESBLOQUEI DE FORMA ORDENADA AO RESPONDER/CONCLUIR CADA MODULO;
- 
+        
        for ($i=1; $i <= $quantidade_perguntas ; $i++) { 
 
          $verifica_qtd_questoes = DB::table('respostas_questionario')
@@ -713,6 +698,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
              $num_questao = $verifica_qtd_questoes;
              $num_questao += 1;
              var_dump('correção: id_modulo_cadastrado está vindo 2 e não valor 1 como deve ser!!!!!');
+
         }
         
          $perguntas_quiz = Request::input('pergunta_quiz_'.$i);
@@ -786,30 +772,71 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 
   //obs : armazenamento dos arquivos estão no controller ArquivosController;
 
-  public function cadastrar_permissoes(){
+  public function  opcoes_permissoes(){
       
       $user = Auth::user();
+
       $tab_usuarios = DB::table('users')
       ->get();
-
-       return view('cadastrar_permissoes')
-    ->with('tab_usuarios', $tab_usuarios);
-
+     
+     
+     // dd( $checkbutton2);
+      return view('cadastrar_permissoes')
+       ->with('tab_usuarios', $tab_usuarios);
   }
 
   public function tab_user_permissoes(){
 
-      $user = Auth::user();
-      
+      $my_id = Auth::user();
+      $id_user = Request::input('user_select');
       //fazer join com tabela de permissoes dos usuarios;
-      $tab_usuarios = DB::table('users')
-      ->get();
+      
+      $tab_permiss = DB::table('permissoes_categorias')
+       ->get();
+
+      $nome =  DB::table('users')
+       ->where('id', $id_user)
+       ->first();
+
+       //join entre permissoes_categorias e permissoes_painel
+      $paineis_permiss = DB::table('permissoes_categorias as a')
+        ->join('permissoes_paineis as b','a.id','=','b.id_categoria_permiss')
+        ->select('a.*', 'b.id as Id_carteira', 'b.id_categoria_permiss as Categoria', 'b.nome_painel') 
+        ->orderBy('a.id','asc')
+        ->get();
 
 
-    return view('cadastrar_permissoes')
-    ->with('tab_usuarios', $tab_usuarios);
+    //dd($paineis_permiss);
+    return view('tabela_permissoes')
+    ->with('nome', $nome->name)
+    ->with('id_user', $id_user)
+    ->with('tab_permiss', $tab_permiss)
+    ->with('paineis_permiss', $paineis_permiss)
+    ->with('qtd_categorias',$tab_permiss->count());
 
   }
 
+  public function inserir_permiss($qtd_categorias, $id_user){
 
+  
+
+    for ($i=0; $i < $qtd_categorias; $i++) { 
+
+    if (isset($_GET['radio_button_'.$i])) {
+    
+        $checkbox[] = intval($_GET['radio_button_'.$i]);
+         /*  if ($checkbox == '') {
+      }*/
+     }
+}
+
+    dd($checkbox);
+     /* $inserir_permiss = DB::table('permissoes_categorias as a')
+            ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
+            ->select('a.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')
+            ->where('id_user',$id_user)
+            ->where('id_permissao', $id_permissao)
+            ->first();*/
+       return back();
+  }
 }

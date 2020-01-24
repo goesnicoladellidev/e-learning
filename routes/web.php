@@ -59,6 +59,7 @@ Route::get('/anexar_videos', 'HomeController@anexar_videos')->name('cadastra_per
 /*Route::get('/cadastrar_perg/{setor}/{carteira}/{qtd_perg}','HomeController@cadastrar_perg')->name('cadastro_perguntas');*/
 /*-------------------------------------------------------------------*/
 //cadastro cursos:
+
 Route::get('/rota_cadastrar_curso', 'HomeController@rota_cadastrar_curso')->name('cadastrar_curso');
 
 //pega valor da seleção por json / jquery
@@ -69,8 +70,12 @@ Route::get('/rota_ranking/premiacoes', 'HomeController@rota_ranking')->name('rot
 
 Route::get('/rota_ranking/receber_premio', 'HomeController@receber_premio')->name('rota_ranking');
 
-Route::get('/cadastrar_permissoes', 'HomeController@cadastrar_permissoes')->name('cadastrar_permissoes');
+Route::get('/opcoes_permissoes', 'HomeController@opcoes_permissoes')->name('opcoes_permissoes');
 
+
+Route::get('/tab_user_permissoes', 'HomeController@tab_user_permissoes')->name('tab_user_permissoes');
+
+Route::get('/inserir_permiss/{qtd_categorias}/{id_user}', 'HomeController@inserir_permiss')->name('inserir_permiss');
 
 
 //--------------------------------------------------------------------------
