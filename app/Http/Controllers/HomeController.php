@@ -410,7 +410,7 @@ public function rota_ranking(){
               ->select('a.*','b.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.id_modulo_cadastrado as Modulo_cadastro','b.titulo_pergunta as Titulo_pergunta','b.num_questao as Num_questao','b.questao as Questao', 'b.resposta_1 as Resposta_1','b.resposta_2 as Resposta_2','b.resposta_3 as Resposta_3','b.resposta_4 as Resposta_4','b.valor_resp_1 as Valor_resp_1','b.valor_resp_2 as Valor_resp_2','b.valor_resp_3 as Valor_resp_3','b.valor_resp_4 as Valor_resp_4')
               ->where('a.id_setor',$id_setor)
               ->where('a.id_carteira', $id_carteira)
-               ->where('a.id_modulo', $id_modulo)
+              ->where('a.id_modulo', $id_modulo)
               ->get();
 
            return view('questionario_elearning')
@@ -779,7 +779,6 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
       $tab_usuarios = DB::table('users')
       ->get();
      
-     
      // dd( $checkbutton2);
       return view('cadastrar_permissoes')
        ->with('tab_usuarios', $tab_usuarios);
@@ -790,7 +789,7 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
       $my_id = Auth::user();
       $id_user = Request::input('user_select');
       //fazer join com tabela de permissoes dos usuarios;
-      
+
       $tab_permiss = DB::table('permissoes_categorias')
        ->get();
 
@@ -798,39 +797,52 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
        ->where('id', $id_user)
        ->first();
 
-       //join entre permissoes_categorias e permissoes_painel
       $paineis_permiss = DB::table('permissoes_categorias as a')
-        ->join('permissoes_paineis as b','a.id','=','b.id_categoria_permiss')
-        ->select('a.*', 'b.id as Id_carteira', 'b.id_categoria_permiss as Categoria', 'b.nome_painel') 
         ->orderBy('a.id','asc')
         ->get();
+     
+        $count =0;
+        $qtd_categorias = $tab_permiss->count();
+  
+    //dd($qtd_categorias);
 
-
-    //dd($paineis_permiss);
     return view('tabela_permissoes')
     ->with('nome', $nome->name)
     ->with('id_user', $id_user)
+   //->with('resp',$resp)
+    ->with('count',$count)
     ->with('tab_permiss', $tab_permiss)
     ->with('paineis_permiss', $paineis_permiss)
-    ->with('qtd_categorias',$tab_permiss->count());
+    ->with('qtd_categorias',$qtd_categorias);
 
   }
 
   public function inserir_permiss($qtd_categorias, $id_user){
 
   
-
-    for ($i=0; $i < $qtd_categorias; $i++) { 
+    //$checkbox[] = '';$qtd_categorias
+    for ($i=0; $i < 15; $i++) { 
 
     if (isset($_GET['radio_button_'.$i])) {
     
         $checkbox[] = intval($_GET['radio_button_'.$i]);
-         /*  if ($checkbox == '') {
-      }*/
-     }
-}
 
-    dd($checkbox);
+        $teste[] = array('radio_button_'.$i => $_GET['radio_button_'.$i]  );
+        //dd($teste);
+     }
+}   
+  foreach ($teste as $key => $value) {
+    $valor[$key] = $value;
+  }
+  
+  var_dump($checkbox);
+    dd($valor); //puxando corretamente o array
+    //obs:  falta pegar os sub indices de cada array!!!!
+
+ die;
+
+
+ 
      /* $inserir_permiss = DB::table('permissoes_categorias as a')
             ->join('modulo_controller as b', 'a.id_modulo', '=', 'b.id_modulo_cadastrado')
             ->select('a.*','a.id as Id','a.id_modulo as Modulo_num','a.aula_descricao as Aula_descricao','a.link_aula as Aula_link','b.modulo_visibilidade as Modulo_visibilidade','b.modulo_concluido as Modulo_concluido', 'b.media_questao_user as Media_questao_user')

@@ -15,10 +15,10 @@
 </header>
 <section>
 
- <form method="get" action="{{ url('/inserir_permiss', [$qtd_categorias, $id_user]) }}">
+   <form method="get" action="{{ url('/inserir_permiss', [$qtd_categorias, $id_user]) }}">
 
     <div id="ranking" class="tbl-ranking">
-     <div class="panel-group" style="margin-top: 200%" >
+       <div class="panel-group" style="margin-top: 200%" >
         <h4 style=" margin-left: -250% "><strong>Usuário: {{$nome}}</strong></h4>
         <br>
         <div class="panel panel-default" style=" margin-left: -250% " > <!--  cria linha que separa os buttons    -->
@@ -29,27 +29,41 @@
             <h4 class="panel-title">
             </h4>
             <!-- </div> -->
+           
             @foreach($paineis_permiss as $key=>$categorias)
+
+            <?php 
+                $keys =  $key;
+         $resp = DB::table('permissoes_categorias as a')
+            ->join('permissoes_paineis as b','a.id','=','b.id_categoria_permiss')
+            ->select('b.*') 
+            ->orderBy('b.id','asc')
+            ->where('b.id_categoria_permiss', $key+1) //arrumar aqui ;
+            ->get();
+            ?>
+
             <div class="panel-heading" style="margin-left: 1%" >
-              <h4 class="panel-title"><input class= "first" type="checkbox" multiple="" name="radio_button_all{{$key}}" value="radio_button_all " onclick="toggle(this,'radio_button_{{$key}}')"> <span class="fa fa-folder fa-lg"></span></a>
-                <a  data-toggle="collapse" href="#collapse-{{$key}}" >{{$categorias->nome_pasta}} -  {{$categorias->descricao}}
+              <h4 class="panel-title"><input class= "first" type="checkbox" multiple="" name="radio_button_all_{{$keys}}" id=radio_button_all_{{$keys}}" value="1" onclick="toggle(this,'radio_button_{{$keys}}')"> <span class="fa fa-folder fa-lg"></span></a>
+                <a  data-toggle="collapse" href="#collapse-{{$keys}}" >{{$categorias->nome_pasta}} -  {{$categorias->descricao}}
                 </a>
             </h4>
         </div>
-        <div id="collapse-{{$key}}" class="panel-collapse collapse" >
+        <div id="collapse-{{$keys}}" class="panel-collapse collapse" >
           <ul class="list-group">
-             <li class="list-group-item">
-                <input class="{{$categorias->nome_pasta}}" id="radio_button_{{$key}}" type="checkbox" multiple="" name="radio_button_{{$key}}" value="1">
-                {{$categorias->nome_painel}} {{$key}}
+            @foreach($resp as $key=>$categoria)
+            <li class="list-group-item">
+                <input class="{{$categoria->nome_painel}}" id="radio_button_{{$keys}}" type="checkbox" multiple="" name="radio_button_{{$keys}}" value="1">
+                {{$categoria->nome_painel}} {{$key}}
             </li>
+            @endforeach
         </ul>
     </div>
     @endforeach
-     </div>
-     <br><br><br><br>
-             <div class="col-md-2" name="avancar" id="avancar" style=" margin-left: -90%; margin-top: 2%" >
-                    <button class="btn btn-success"> Avançar </button>
-         </div>
+</div>
+<br><br><br><br>
+<div class="col-md-2" name="avancar" id="avancar" style=" margin-left: -90%; margin-top: 2%" >
+    <button class="btn btn-success"> Avançar </button>
+</div>
 
 </div>
 </div>
@@ -59,7 +73,6 @@
 </div>
 
 <script type="text/javascript">
-
     $('input:radio').bind('click mousedown', (function() {
         var isChecked;
         return function(event) {
@@ -73,58 +86,76 @@
                 isChecked = this.checked;
             }
         }})());
-
     </script>
 
+    <script type="text/javascript">
 
-<!-- <script type="text/javascript">
+        function toggle(source,valor) {
+
+          checkboxes = document.getElementsByName(valor);
+          rb_0 = document.getElementsByName('radio_button_0');
+          rb_1 = document.getElementsByName('radio_button_1');
+
+   for(var i=0, n=checkboxes.length; i<n;i++) {
+
+        checkboxes[i].checked = source.checked;
     
- function selectAll(id, isSelected) {
-
- alert("id="+id+" selected? "+isSelected);
- var selectObj=document.getElementById(id);
- //alert("obj="+selectObj.type);
- var options=selectObj.options;
- //alert("option length="+options.length);
- for(var i=0; i<options.length; i++) {
-    options[i].selected=isSelected;
- }
-}
-
-</script>
--->
-
-<script type="text/javascript">
-    
-    function toggle(source,valor) {
- 
-  checkboxes = document.getElementsByName(valor);
-  //alert(source,checkboxes);
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
-
   }
 }
 </script>
 
-<!-- 
-<script type="text/javascript">
-    $(document).ready(function(){
-    $('#radio_button_0, #radio_button_1, #radio_button_2, #radio_button_3,#radio_button_4,#radio_button_5,.radio_button_6').click(function(){
-        $(this).val(this.checked ? 1 : 0);
-    });
-});
-</script> -->
 
-<!-- <script type="text/javascript">
-    function selectAll(id) {
-        var selectObj=document.getElementById(id);
-        var options=selectObj.options;
-        alert(id);
-        $(".first").click(function(){
-            $(".id").prop("checked",$(this).prop("checked"));
-            x.options = true;
-        });
+<!-- teste 1 ok -->
+  <script type="text/javascript">
+
+        function toggle3(source,valor) {
+
+          checkboxes = document.getElementsByName(valor);
+          rb_0 = document.getElementsByName('radio_button_0');
+          rb_1 = document.getElementsByName('radio_button_1');
+         
+   for(var i=0, n=checkboxes.length; i<n;i++) {
+
+        checkboxes[i].checked = source.checked;
     }
-</script> -->
+  }
+}
+</script>
 
+<!-- teste 2 -->
+  <script type="text/javascript">
+
+        function toggle3(source,valor) {
+
+           // alert(valor);
+          checkboxes = document.getElementsByName(valor);
+          //rb_0 = document.getElementsByName('radio_button_0');
+          //rb_1 = document.getElementsByName('radio_button_1');
+ 
+   for(var i=0, n=checkboxes.length; i<n;i++) {
+    
+
+    if (valor == "radio_button_0") {
+        //alert('x');
+        var val = 'radio_button_'+i;
+        //alert('x');
+        checkboxes1 = document.getElementsByName(val);
+        checkboxes1[i].checked = source.checked;
+        alert('x');
+        for (var y = 0; y < 35; y++) {//INVERTER O FOREACH !!!!!! 
+
+        var vall = 'radio_button_all_'+y;
+        checkboxes0 = document.getElementsByName(vall);
+
+        checkboxes0[i].checked = source.checked;
+        //nao esta percorrento todos os indices desse array;
+
+        }
+       
+    }else{
+
+        checkboxes[i].checked = source.checked;
+    }
+  }
+}
+</script>
