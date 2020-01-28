@@ -40,7 +40,7 @@
                             <input type="checkbox" id="drop-cobranca">
 
                             <ul>
-                                <li><a href= {{url('/treinamento_negociadores_iframe/1/1')}} >Negociadores</a></li>
+                                <li><a href= {{url('/treinamento_negociadores_iframe/1/12')}} >Negociadores</a></li>
                                 <li><a href="#">Desbloquear</a></li>
                             </ul>
                         </li>

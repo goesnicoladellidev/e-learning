@@ -833,12 +833,16 @@ public function cadastra_pergunta($setor, $carteira, $qtd_perg, Request $request
 }   
   foreach ($teste as $key => $value) {
     $valor[$key] = $value;
+    $va[] = $value;
   }
   
-  var_dump($checkbox);
-    dd($valor); //puxando corretamente o array
+   var_dump($checkbox);
+   $search = array_search("radio_button_3", array_keys($valor));
+   //$test = array_search($valor);
+    dd($teste); //puxando corretamente o array
     //obs:  falta pegar os sub indices de cada array!!!!
 
+   // b2 -> teste[0]
  die;
 
 
